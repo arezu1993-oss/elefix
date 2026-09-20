@@ -1,0 +1,225 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════
+   ELEFIX — Design Tokens
+   Accent: Circuit Green (logo) · Neutral: Warm Slate
+   ═══════════════════════════════════════════ */
+
+@theme {
+  /* ── Breakpoints ── */
+  --breakpoint-sm:  640px;
+  --breakpoint-md:  768px;
+  --breakpoint-lg:  1024px;
+  --breakpoint-xl:  1280px;
+  --breakpoint-2xl: 1536px;
+
+  /* ── Accent — Circuit Green ── */
+  --color-accent-50:  oklch(97% 0.025 152);
+  --color-accent-100: oklch(93% 0.055 152);
+  --color-accent-200: oklch(86% 0.090 152);
+  --color-accent-300: oklch(76% 0.130 152);
+  --color-accent-400: oklch(65% 0.155 152);
+  --color-accent-500: oklch(52% 0.150 152);  /* برند / CTA */
+  --color-accent-600: oklch(43% 0.135 152);
+  --color-accent-700: oklch(34% 0.115 152);
+  --color-accent-800: oklch(26% 0.090 152);
+  --color-accent-900: oklch(18% 0.060 152);
+
+  /* ── Neutral — Warm Slate ── */
+  --color-neutral-0:   oklch(98.5% 0.004 248);
+  --color-neutral-50:  oklch(96.5% 0.007 248);
+  --color-neutral-100: oklch(93%   0.010 248);
+  --color-neutral-200: oklch(87%   0.012 248);
+  --color-neutral-300: oklch(76%   0.014 248);
+  --color-neutral-400: oklch(62%   0.016 248);
+  --color-neutral-500: oklch(50%   0.016 248);
+  --color-neutral-600: oklch(40%   0.016 248);
+  --color-neutral-700: oklch(30%   0.014 248);
+  --color-neutral-800: oklch(20%   0.012 248);
+  --color-neutral-900: oklch(13%   0.010 248);
+
+  /* ── Dark surfaces (بخش‌های تاریک: Trust / Stats / Footer) ── */
+  --color-ink-900: oklch(11% 0.014 248);  /* عمیق‌ترین */
+  --color-ink-800: oklch(14% 0.016 248);  /* پس‌زمینه سکشن */
+  --color-ink-700: oklch(18% 0.018 248);  /* کارت روی تاریک */
+  --color-ink-600: oklch(23% 0.020 248);  /* کارت hover */
+  --color-ink-500: oklch(30% 0.018 248);  /* بوردر */
+
+  /* ── Light semantic ── */
+  --color-page:       var(--color-neutral-0);
+  --color-card:       var(--color-neutral-50);
+  --color-raised:     oklch(100% 0 0);
+  --color-line:       var(--color-neutral-100);
+  --color-line-bold:  var(--color-neutral-200);
+  --color-ink:        var(--color-neutral-800);  /* تیتر */
+  --color-body:       var(--color-neutral-600);  /* متن */
+  --color-muted:      var(--color-neutral-500);
+  --color-faint:      var(--color-neutral-400);
+
+  /* ── On-dark semantic ── */
+  --color-on-dark:        oklch(95% 0.008 248);
+  --color-on-dark-body:   oklch(78% 0.012 248);
+  --color-on-dark-muted:  oklch(62% 0.014 248);
+  --color-line-dark:      oklch(30% 0.018 248 / 0.55);
+
+  /* ── سازگاری با نام‌های قدیمی (تا کامپوننت‌ها ریفکتور شن) ── */
+  --color-surface-page:   var(--color-page);
+  --color-surface-card:   var(--color-card);
+  --color-surface-raised: var(--color-raised);
+  --color-surface-dark:   var(--color-ink-800);
+  --color-surface-dark-2: var(--color-ink-900);
+  --color-border:         var(--color-line);
+  --color-border-muted:   var(--color-line-bold);
+
+  /* ── States ── */
+  --color-success: oklch(52% 0.14 152);
+  --color-warning: oklch(70% 0.16 80);
+  --color-danger:  oklch(55% 0.20 25);
+  --color-info:    oklch(58% 0.16 240);
+
+  /* ── Type scale (namespace صحیح: --text-*) ── */
+  --text-xs:   0.75rem;
+  --text-sm:   0.875rem;
+  --text-base: 1rem;
+  --text-lg:   1.125rem;
+  --text-xl:   1.25rem;
+  --text-2xl:  1.5rem;
+  --text-3xl:  1.875rem;
+  --text-4xl:  2.25rem;
+  --text-5xl:  3rem;
+  --text-6xl:  3.75rem;
+
+  /* ── Leading (namespace صحیح: --leading-*) ── */
+  --leading-tight:   1.25;
+  --leading-snug:    1.375;
+  --leading-normal:  1.6;
+  --leading-relaxed: 1.75;
+
+  /* ── Radius ── */
+  --radius-sm:   0.375rem;
+  --radius-md:   0.75rem;
+  --radius-lg:   1rem;
+  --radius-xl:   1.5rem;
+  --radius-2xl:  2rem;
+
+  /* ── Shadow ── */
+  --shadow-xs: 0 1px 2px oklch(13% 0.01 248 / 0.06);
+  --shadow-sm: 0 1px 4px oklch(13% 0.01 248 / 0.08), 0 0 0 1px oklch(13% 0.01 248 / 0.04);
+  --shadow-md: 0 4px 16px oklch(13% 0.01 248 / 0.10), 0 0 0 1px oklch(13% 0.01 248 / 0.04);
+  --shadow-lg: 0 8px 32px oklch(13% 0.01 248 / 0.12), 0 0 0 1px oklch(13% 0.01 248 / 0.04);
+  --shadow-glow: 0 0 0 1px var(--color-accent-500), 0 0 24px oklch(52% 0.15 152 / 0.25);
+
+  /* ── Easing (namespace صحیح: --ease-*) ── */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* ═══ Runtime vars — اسم‌هایی که کامپوننت‌ها با var() صدا می‌زنن ═══ */
+:root {
+  --surface-1: var(--color-page);
+  --surface-2: var(--color-card);
+  --surface-3: var(--color-raised);
+  --border-subtle: var(--color-line);
+  --accent: var(--color-accent-500);
+  --accent-subtle: oklch(52% 0.15 152 / 0.08);
+  --accent-muted:  oklch(52% 0.15 152 / 0.28);
+  --text-strong: var(--color-ink);
+  --text-soft:   var(--color-body);
+  --text-dim:    var(--color-muted);
+}
+
+/* ═══ Base ═══ */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    overflow-x: hidden;
+    background-color: var(--color-page);
+    color: var(--color-body);
+    font-family: var(--font-vazir), system-ui, sans-serif;
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-strong);
+    line-height: var(--leading-tight);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  p { line-height: var(--leading-relaxed); text-wrap: pretty; }
+
+  img, video, canvas, svg { max-width: 100%; display: block; }
+  button, input, textarea, select { font-family: inherit; font-size: inherit; }
+  a { color: inherit; text-decoration: none; }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent-500);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ═══ جزیره تاریک — کلید حل «بی‌روح بودن» ═══
+   کافیه روی <section> بذاری: class="section-dark"
+   همه‌ی var()های داخلش خودکار به نسخه تاریک سوییچ می‌شن. */
+@layer components {
+  .section-dark {
+    --surface-1: var(--color-ink-800);
+    --surface-2: var(--color-ink-700);
+    --surface-3: var(--color-ink-600);
+    --border-subtle: var(--color-line-dark);
+    --text-strong: var(--color-on-dark);
+    --text-soft:   var(--color-on-dark-body);
+    --text-dim:    var(--color-on-dark-muted);
+
+    background-color: var(--color-ink-800);
+    color: var(--color-on-dark-body);
+  }
+
+  .section-dark h1, .section-dark h2,
+  .section-dark h3, .section-dark h4 { color: var(--color-on-dark); }
+
+  /* بافت مدار محو — عمق می‌ده بدون شلوغی */
+  .circuit-texture {
+    background-image:
+      linear-gradient(oklch(52% 0.15 152 / 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, oklch(52% 0.15 152 / 0.05) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+}
+
+/* ═══ Utilities ═══ */
+@layer utilities {
+  .surface-1 { background-color: var(--surface-1); }
+  .surface-2 { background-color: var(--surface-2); }
+  .surface-3 { background-color: var(--surface-3); }
+
+  .t-strong { color: var(--text-strong); }
+  .t-soft   { color: var(--text-soft); }
+  .t-dim    { color: var(--text-dim); }
+  .t-accent { color: var(--color-accent-500); }
+
+  .b-subtle { border-color: var(--border-subtle); }
+
+  .glow-accent { box-shadow: var(--shadow-glow); }
+}
