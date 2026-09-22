@@ -228,16 +228,6 @@ export default function Footer() {
                   </div>
                 ) : null}
               </form>
-
-              <a
-                href={TELEGRAM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 py-2.5 text-xs text-slate-400 transition hover:border-emerald-500/40 hover:text-emerald-400"
-              >
-                <TelegramIcon className="h-4 w-4" />
-                ارتباط مستقیم با آقای شادمانی
-              </a>
             </div>
           </div>
         </div>

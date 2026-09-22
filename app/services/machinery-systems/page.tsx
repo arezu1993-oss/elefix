@@ -73,44 +73,16 @@ const subServices = [
 ];
 
 const steps = [
-  {
-    num: "۱",
-    title: "دریافت درخواست",
-    desc: "تماس یا فرم آنلاین — در کمتر از ۲ ساعت پاسخ می‌گیرید.",
-  },
-  {
-    num: "۲",
-    title: "دیاگنوز اولیه",
-    desc: "بررسی علائم خرابی با ابزار دیجیتال و ارائه گزارش اولیه.",
-  },
-  {
-    num: "۳",
-    title: "تعمیر و تست",
-    desc: "انجام تعمیر با قطعات اصلی و راستی‌آزمایی زیر بار واقعی.",
-  },
-  {
-    num: "۴",
-    title: "تحویل و ضمانت",
-    desc: "تحویل با گزارش فنی کامل و ضمانت‌نامه کتبی خدمات.",
-  },
+  { num: "۱", title: "دریافت درخواست", desc: "تماس یا فرم آنلاین — در کمتر از ۲ ساعت پاسخ می‌گیرید." },
+  { num: "۲", title: "دیاگنوز اولیه", desc: "بررسی علائم خرابی با ابزار دیجیتال و ارائه گزارش اولیه." },
+  { num: "۳", title: "تعمیر و تست", desc: "انجام تعمیر با قطعات اصلی و راستی‌آزمایی زیر بار واقعی." },
+  { num: "۴", title: "تحویل و ضمانت", desc: "تحویل با گزارش فنی کامل و ضمانت‌نامه کتبی خدمات." },
 ];
 
 const tools = [
-  {
-    name: "اسیلوسکوپ صنعتی",
-    detail: "آنالیز سیگنال در فرکانس‌های بالا — دقت ±۱٪",
-    icon: Activity,
-  },
-  {
-    name: "اسکنر دیاگنوستیک",
-    detail: "خواندن و پاک‌سازی کدهای خطا برای بیش از ۴۰ برند",
-    icon: ScanLine,
-  },
-  {
-    name: "تستر ایزولاسیون",
-    detail: "تشخیص اتصال کوتاه در مدارهای فشار قوی تا ۵ کیلوولت",
-    icon: Shield,
-  },
+  { name: "اسیلوسکوپ صنعتی", detail: "آنالیز سیگنال در فرکانس‌های بالا — دقت ±۱٪", icon: Activity },
+  { name: "اسکنر دیاگنوستیک", detail: "خواندن و پاک‌سازی کدهای خطا برای بیش از ۴۰ برند", icon: ScanLine },
+  { name: "تستر ایزولاسیون", detail: "تشخیص اتصال کوتاه در مدارهای فشار قوی تا ۵ کیلوولت", icon: Shield },
 ];
 
 const brands = [
@@ -154,26 +126,10 @@ function CircuitSVG() {
       <rect width="400" height="260" fill="oklch(97% 0.006 145)" rx="16" />
 
       {[52, 104, 156, 208].map((y) => (
-        <line
-          key={"h" + y}
-          x1="0"
-          y1={y}
-          x2="400"
-          y2={y}
-          stroke="oklch(88% 0.01 145)"
-          strokeWidth="1"
-        />
+        <line key={"h" + y} x1="0" y1={y} x2="400" y2={y} stroke="oklch(88% 0.01 145)" strokeWidth="1" />
       ))}
       {[80, 160, 240, 320].map((x) => (
-        <line
-          key={"v" + x}
-          x1={x}
-          y1="0"
-          x2={x}
-          y2="260"
-          stroke="oklch(88% 0.01 145)"
-          strokeWidth="1"
-        />
+        <line key={"v" + x} x1={x} y1="0" x2={x} y2="260" stroke="oklch(88% 0.01 145)" strokeWidth="1" />
       ))}
 
       <path
@@ -205,142 +161,24 @@ function CircuitSVG() {
         className="cl"
       />
 
-      <rect
-        x="70"
-        y="108"
-        width="52"
-        height="44"
-        rx="6"
-        fill="oklch(100% 0 0)"
-        stroke="oklch(42% 0.16 145)"
-        strokeWidth="1.5"
-      />
-      <text
-        x="96"
-        y="128"
-        textAnchor="middle"
-        fontSize="9"
-        fill="oklch(42% 0.16 145)"
-        fontFamily="monospace"
-        fontWeight="700"
-      >
-        ECU
-      </text>
-      <text
-        x="96"
-        y="141"
-        textAnchor="middle"
-        fontSize="7"
-        fill="oklch(58% 0.008 145)"
-        fontFamily="monospace"
-      >
-        v2.4
-      </text>
+      <rect x="70" y="108" width="52" height="44" rx="6" fill="oklch(100% 0 0)" stroke="oklch(42% 0.16 145)" strokeWidth="1.5" />
+      <text x="96" y="128" textAnchor="middle" fontSize="9" fill="oklch(42% 0.16 145)" fontFamily="monospace" fontWeight="700">ECU</text>
+      <text x="96" y="141" textAnchor="middle" fontSize="7" fill="oklch(58% 0.008 145)" fontFamily="monospace">v2.4</text>
 
-      <rect
-        x="174"
-        y="108"
-        width="52"
-        height="44"
-        rx="6"
-        fill="oklch(100% 0 0)"
-        stroke="oklch(62% 0.18 145 / 0.6)"
-        strokeWidth="1.5"
-      />
-      <text
-        x="200"
-        y="128"
-        textAnchor="middle"
-        fontSize="8"
-        fill="oklch(42% 0.16 145)"
-        fontFamily="monospace"
-        fontWeight="700"
-      >
-        SENSOR
-      </text>
-      <text
-        x="200"
-        y="141"
-        textAnchor="middle"
-        fontSize="7"
-        fill="oklch(58% 0.008 145)"
-        fontFamily="monospace"
-      >
-        x12
-      </text>
+      <rect x="174" y="108" width="52" height="44" rx="6" fill="oklch(100% 0 0)" stroke="oklch(62% 0.18 145 / 0.6)" strokeWidth="1.5" />
+      <text x="200" y="128" textAnchor="middle" fontSize="8" fill="oklch(42% 0.16 145)" fontFamily="monospace" fontWeight="700">SENSOR</text>
+      <text x="200" y="141" textAnchor="middle" fontSize="7" fill="oklch(58% 0.008 145)" fontFamily="monospace">x12</text>
 
-      <rect
-        x="288"
-        y="108"
-        width="52"
-        height="44"
-        rx="6"
-        fill="oklch(100% 0 0)"
-        stroke="oklch(62% 0.18 145 / 0.6)"
-        strokeWidth="1.5"
-      />
-      <text
-        x="314"
-        y="128"
-        textAnchor="middle"
-        fontSize="8"
-        fill="oklch(42% 0.16 145)"
-        fontFamily="monospace"
-        fontWeight="700"
-      >
-        RELAY
-      </text>
-      <text
-        x="314"
-        y="141"
-        textAnchor="middle"
-        fontSize="7"
-        fill="oklch(58% 0.008 145)"
-        fontFamily="monospace"
-      >
-        24V
-      </text>
+      <rect x="288" y="108" width="52" height="44" rx="6" fill="oklch(100% 0 0)" stroke="oklch(62% 0.18 145 / 0.6)" strokeWidth="1.5" />
+      <text x="314" y="128" textAnchor="middle" fontSize="8" fill="oklch(42% 0.16 145)" fontFamily="monospace" fontWeight="700">RELAY</text>
+      <text x="314" y="141" textAnchor="middle" fontSize="7" fill="oklch(58% 0.008 145)" fontFamily="monospace">24V</text>
 
-      <circle
-        cx="120"
-        cy="130"
-        r="5"
-        fill="oklch(42% 0.16 145)"
-        className="pn1"
-      />
-      <circle
-        cx="200"
-        cy="108"
-        r="5"
-        fill="oklch(52% 0.18 145)"
-        className="pn2"
-      />
-      <circle
-        cx="260"
-        cy="130"
-        r="5"
-        fill="oklch(42% 0.16 145)"
-        className="pn3"
-      />
+      <circle cx="120" cy="130" r="5" fill="oklch(42% 0.16 145)" className="pn1" />
+      <circle cx="200" cy="108" r="5" fill="oklch(52% 0.18 145)" className="pn2" />
+      <circle cx="260" cy="130" r="5" fill="oklch(42% 0.16 145)" className="pn3" />
 
-      <text
-        x="8"
-        y="126"
-        fontSize="8"
-        fill="oklch(58% 0.008 145)"
-        fontFamily="monospace"
-      >
-        +24V
-      </text>
-      <text
-        x="372"
-        y="126"
-        fontSize="8"
-        fill="oklch(58% 0.008 145)"
-        fontFamily="monospace"
-      >
-        GND
-      </text>
+      <text x="8"   y="126" fontSize="8" fill="oklch(58% 0.008 145)" fontFamily="monospace">+24V</text>
+      <text x="372" y="126" fontSize="8" fill="oklch(58% 0.008 145)" fontFamily="monospace">GND</text>
     </svg>
   );
 }
