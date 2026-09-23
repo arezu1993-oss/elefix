@@ -1,11 +1,10 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   output: "export",
+  trailingSlash: true, // باعث می‌شود پوشه‌ها به فرم /contact/index.html ساخته شوند
   images: {
-    unoptimized: true,
+    unoptimized: true, // برای خروجی استاتیک در نتلیفای ضروری است
   },
-  trailingSlash: true,
 };
 
-export default nextConfig;
+module.exports = nextConfig;

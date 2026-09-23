@@ -9,6 +9,7 @@ import "./globals.css";
 
 import ScrollTools from "../components/shared/ScrollTools";
 import SmoothScroll from "../components/SmoothScroll";
+import FloatingContact from "../components/shared/FloatingContact"; 
 
 export const metadata: Metadata = {
   title: "الفیکس | تعمیر بردهای الکترونیکی راهسازی و کشاورزی",
@@ -84,6 +85,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
           <Footer />
           <ScrollTools />
+          <FloatingContact />
         </SmoothScroll>
       </body>
     </html>

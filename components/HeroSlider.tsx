@@ -284,7 +284,7 @@ export default function HeroSection() {
                 style={{ background: emerald }}
               />
             </span>
-            لابراتوار تخصصی الکترونیک صنعتی — بیش از ۱۰ سال تجربه
+            لابراتوار تخصصی الکترونیک صنعتی — بیش از ۸ سال تجربه
           </span>
         </motion.div>
 
@@ -353,7 +353,7 @@ export default function HeroSection() {
         </motion.div>
 
         {/* Stats */}
-        <motion.div
+        {/* <motion.div
           ref={statsRef}
           variants={item}
           className="flex flex-wrap gap-8 sm:gap-14 justify-center mb-2"
@@ -385,7 +385,7 @@ export default function HeroSection() {
             label="زمان پاسخ"
             started={statsVisible}
           />
-        </motion.div>
+        </motion.div> */}
       </motion.div>
 
       {/* ══ Feature cards ══ */}

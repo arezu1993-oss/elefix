@@ -1,432 +1,378 @@
-import Link from "next/link";
+"use client";
+
+import React, { useState } from "react";
 import {
   Phone,
-  MapPin,
-  MessageSquare,
-  Clock,
-  ArrowLeft,
+  Send,
   ShieldCheck,
-  FileText,
-  Headphones,
-  Building2,
-  Factory,
+  Truck,
   CheckCircle2,
+  ExternalLink,
+  HelpCircle,
+  Clock,
+  Sparkles,
+  ArrowUpLeft,
 } from "lucide-react";
 
-const quickContactItems = [
-  {
-    title: "تماس مستقیم",
-    value: "۳۵۷۶ ۳۰۶ ۰۹۱۲",
-    href: "tel:09123063576",
-    description: "برای استعلام قیمت، ثبت سفارش و دریافت اطلاعات محصول",
-    icon: Phone,
-    color: "text-[#c27829]",
-    bg: "bg-[#c27829]/10",
-    border: "border-[#c27829]/20",
-  },
-  {
-    title: "واتس‌اپ واحد فروش",
-    value: "۹۳۲۳ ۰۹۰ ۰۹۱۲",
-    href: "https://wa.me/989120909323",
-    description: "مناسب برای دریافت پاسخ سریع و هماهنگی سفارش",
-    icon: MessageSquare,
-    color: "text-emerald-400",
-    bg: "bg-emerald-500/10",
-    border: "border-emerald-500/20",
-  },
-  {
-    title: "ساعات پاسخگویی",
-    value: "شنبه تا چهارشنبه | ۸ الی ۱۷",
-    href: "#",
-    description: "در ساعات کاری پاسخگوی درخواست‌های فروش و مشاوره هستیم",
-    icon: Clock,
-    color: "text-sky-300",
-    bg: "bg-sky-500/10",
-    border: "border-sky-500/20",
-  },
-];
-
-const supportItems = [
-  {
-    title: "استعلام قیمت",
-    description: "دریافت قیمت روز برای سفارش‌های جزئی یا عمده",
-    icon: FileText,
-  },
-  {
-    title: "مشاوره خرید",
-    description: "راهنمایی برای انتخاب محصول متناسب با نیاز شما",
-    icon: Headphones,
-  },
-  {
-    title: "هماهنگی سفارش",
-    description: "پیگیری شرایط تامین، بسته‌بندی و تحویل",
-    icon: ShieldCheck,
-  },
-];
-
-const addressItems = [
-  {
-    title: "آدرس کارخانه",
-    description: "مکان واحد تولید، تامین و بارگیری مجموعه",
-    value: "ورامین، شهرک صنعتی سالاریه، بلوار نرگس شرقی، پلاک 6، قطعه SH9",
-    icon: Factory,
-    tone: "dark",
-  },
-  {
-    title: "آدرس دفتر مرکزی",
-    description: "محل پیگیری امور اداری، فروش و هماهنگی‌های مجموعه",
-    value:
-      "تهران، چیتگر، خیابان طراوت، خیابان شهید محمد میر کمالی، مجتمع آرام (بیمه)، بلوک A، طبقه همکف تجاری، واحد یک",
-    icon: Building2,
-    tone: "light",
-  },
-];
-
 export default function ContactPage() {
-  return (
-    <main className="bg-white text-slate-800">
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-[#07111f] text-white">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute right-[-8rem] top-[-6rem] h-72 w-72 rounded-full bg-[#c27829]/20 blur-3xl" />
-          <div className="absolute left-[-6rem] bottom-[-8rem] h-72 w-72 rounded-full bg-sky-500/10 blur-3xl" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(194,120,41,0.12),transparent_26%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.02),transparent)]" />
-        </div>
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    serviceType: "سیستم هوشمند جرثقیل (LMI)",
+    message: "",
+  });
 
-        <div className="relative z-10 container mx-auto px-6 pb-16 pt-32 md:px-8 md:pb-20 md:pt-36 lg:px-10">
-          <div className="grid items-center gap-10 lg:grid-cols-12">
-            <div className="lg:col-span-7">
-              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#f0b56d]/20 bg-[#c27829]/10 px-4 py-2 text-xs font-black text-[#f0b56d]">
-                <Phone size={14} />
-                ارتباط با واحد فروش
+  const phoneNumber = "09375525707";
+  const phoneDisplay = "۰۹۳۷ ۵۵۲ ۵۷۰۷";
+  const telegramUrl = "https://t.me/+989375525707";
+
+  // ارسال مستقیم داده‌های فرم به تلگرام
+  const handleTelegramSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const formattedText = `درخواست خدمات فنی (الفیکس):\n\n👤 نام / واحد: ${formData.name}\n📱 شماره تماس: ${formData.phone}\n⚙️ حوزه فنی: ${formData.serviceType}\n📝 شرح اشکال: ${formData.message || "ثبت نشده"}`;
+    const encodedText = encodeURIComponent(formattedText);
+    window.open(`https://t.me/+989375525707?text=${encodedText}`, "_blank");
+  };
+
+  const workflowSteps = [
+    {
+      step: "۱",
+      title: "بررسی اولیه و مشاوره تلفنی",
+      desc: "بررسی نشانه‌های خرابی، کد خطا یا فیلم عملکرد دستگاه جهت تشخیص اولیه ریشه مشکل.",
+      icon: HelpCircle,
+    },
+    {
+      step: "۲",
+      title: "اعزام به محل یا دریافت قطعه",
+      desc: "حضور کارشناس در محل پروژه یا ارسال قطعه و برد الکترونیکی به آزمایشگاه تست.",
+      icon: Truck,
+    },
+    {
+      step: "۳",
+      title: "تعمیر تخصصی و تست عملیاتی",
+      desc: "انجام تعمیرات، کالیبراسیون دقیق سنسورها و تحویل سیستم.",
+      icon: CheckCircle2,
+    },
+  ];
+
+  return (
+    <div className="min-h-screen bg-[var(--color-neutral-100)]/60 text-[var(--color-body)] font-[var(--font-vazir),system-ui,sans-serif] antialiased selection:bg-[var(--color-accent-500)] selection:text-white">
+      {/* هیرو سکشن مدرن و مینیمال */}
+      <section className="relative overflow-hidden section-dark text-[var(--color-on-dark)] pt-28 pb-20 md:pt-36 md:pb-28 border-b border-[var(--color-line-dark)] circuit-texture">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* معرفی و تیتر */}
+            <div className="lg:col-span-7 space-y-6 text-right">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold bg-[var(--color-ink-700)] text-[var(--color-accent-400)] border border-[var(--color-line-dark)] shadow-sm">
+                <ShieldCheck className="w-4 h-4 text-[var(--color-accent-400)]" />
+                پشتیبانی فنی و تخصصی با محمد شادمانی
               </div>
 
-              <h1 className="text-3xl font-black leading-[1.9] text-white md:text-5xl">
-                با ما در ارتباط باشید
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-[1.25]">
+                مشاوره فنی، عیب‌یابی <br />
+                <span className="text-[var(--color-accent-400)]">
+                  و اعزام کارشناس به محل دستگاه
+                </span>
               </h1>
 
-              <p className="mt-6 max-w-2xl text-sm leading-8 text-slate-300 md:text-base">
-                برای دریافت مشاوره، استعلام قیمت، هماهنگی سفارش و اطلاعات بیشتر
-                درباره محصولات سولفاته، از مسیرهای ارتباطی زیر با ما در تماس
-                باشید. تیم فروش شیمی گستر سولفات آماده پاسخگویی سریع به
-                درخواست‌های شماست.
+              <p className="text-[var(--color-on-dark-body)] text-sm sm:text-base leading-relaxed max-w-xl">
+                پاسخگویی به سوالات فنی، نصب و کالیبراسیون سیستم‌های هوشمند
+                مانیتورینگ جرثقیل (LMI)، مدارهای هیدرولیک پروپرشنال و تعمیر بردهای
+               ماشین‌آلات راهسازی و کشاورزی.
               </p>
 
-              <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+              {/* اکشن‌های سریع */}
+              <div className="flex flex-wrap items-center gap-4 pt-2">
                 <a
-                  href="tel:09123063576"
-                  className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#c27829] px-6 py-4 text-sm font-black text-white shadow-lg shadow-[#c27829]/20 transition-all hover:bg-[#a86522]"
+                  href={`tel:${phoneNumber}`}
+                  className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-[var(--color-accent-500)] hover:bg-[var(--color-accent-600)] text-white font-extrabold text-sm transition-all shadow-md hover:shadow-lg"
                 >
-                  تماس مستقیم
-                  <Phone size={18} />
+                  <Phone className="w-4 h-4" />
+                  برقراری تماس مستقیم
                 </a>
 
                 <a
-                  href="https://wa.me/989120909323"
+                  href={telegramUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-sm font-black text-white backdrop-blur-sm transition hover:border-emerald-400/30 hover:bg-emerald-500/10"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[var(--color-ink-700)] hover:bg-[var(--color-ink-600)] text-[var(--color-on-dark)] font-bold text-sm border border-[var(--color-line-dark)] transition-colors"
                 >
-                  پیام در واتس‌اپ
-                  <MessageSquare size={18} />
+                  <Send className="w-4 h-4 text-[var(--color-accent-400)]" />
+                  ارسال پیام در تلگرام
                 </a>
               </div>
-
-              <div className="mt-8 grid gap-3 sm:grid-cols-2">
-                {[
-                  "پاسخگویی برای سفارش‌های عمده",
-                  "هماهنگی سریع با واحد فروش",
-                  "ارائه اطلاعات محصول و تامین",
-                  "ثبت درخواست از طریق تماس و واتس‌اپ",
-                ].map((item) => (
-                  <div
-                    key={item}
-                    className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm"
-                  >
-                    <CheckCircle2
-                      size={18}
-                      className="shrink-0 text-[#f0b56d]"
-                    />
-                    <span className="text-sm text-slate-200">{item}</span>
-                  </div>
-                ))}
-              </div>
             </div>
 
+            {/* فرم ثبت سریع درخواست */}
             <div className="lg:col-span-5">
-              <div className="rounded-[2rem] border border-white/10 bg-white/[0.06] p-6 shadow-2xl backdrop-blur-xl">
-                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-white">
-                  <Headphones size={28} />
-                </div>
-
-                <h2 className="text-2xl font-black text-white">
-                  پاسخگویی سریع و مستقیم
-                </h2>
-
-                <p className="mt-3 text-sm leading-7 text-slate-300">
-                  برای درخواست قیمت، دریافت اطلاعات محصول، آنالیز، وضعیت تامین و
-                  هماهنگی سفارش می‌توانید با واحد فروش در ارتباط باشید.
-                </p>
-
-                <div className="mt-6 space-y-3">
-                  {[
-                    "استعلام قیمت روز محصولات",
-                    "راهنمایی برای انتخاب محصول مناسب",
-                    "هماهنگی سفارش، تامین و تحویل",
-                  ].map((item) => (
-                    <div
-                      key={item}
-                      className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3"
-                    >
-                      <ShieldCheck size={18} className="text-[#f0b56d]" />
-                      <span className="text-sm font-bold text-slate-100">
-                        {item}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-6 rounded-2xl border border-[#c27829]/20 bg-[#c27829]/10 p-4">
-                  <p className="text-xs leading-6 text-[#f6d1a2]">
-                    برای پاسخ سریع‌تر، لطفاً در پیام واتس‌اپ نوع محصول، تناژ
-                    تقریبی و شهر مقصد را هم اعلام کنید.
+              <div className="bg-[var(--color-ink-800)]/95 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-[var(--color-line-dark)] shadow-2xl space-y-5">
+                <div className="space-y-1 text-right border-b border-[var(--color-line-dark)] pb-4">
+                  <div className="flex items-center gap-2 text-[var(--color-accent-400)] text-xs font-bold">
+                    <Sparkles className="w-4 h-4" />
+                    ارتباط هوشمند
+                  </div>
+                  <h2 className="text-base sm:text-lg font-extrabold text-white">
+                    ثبت مشخصات جهت بررسی فنی
+                  </h2>
+                  <p className="text-xs text-[var(--color-on-dark-muted)]">
+                    پیام شما در تلگرام آماده شده و بدون واسطه دریافت می‌شود.
                   </p>
                 </div>
+
+                <form
+                  onSubmit={handleTelegramSubmit}
+                  className="space-y-4 text-right"
+                >
+                  <div>
+                    <label className="block text-xs font-semibold text-[var(--color-on-dark-muted)] mb-1.5">
+                      نام یا واحد پروژه
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="مثال: مهندس راد - شرکت پارس"
+                      value={formData.name}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
+                      className="w-full px-4 py-3 rounded-xl bg-[var(--color-ink-700)] border border-[var(--color-line-dark)] text-white text-xs placeholder:text-[var(--color-neutral-500)] focus:outline-none focus:border-[var(--color-accent-500)] transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-[var(--color-on-dark-muted)] mb-1.5">
+                      شماره تماس
+                    </label>
+                    <input
+                      type="tel"
+                      required
+                      placeholder="۰۹۱۲..."
+                      value={formData.phone}
+                      onChange={(e) =>
+                        setFormData({ ...formData, phone: e.target.value })
+                      }
+                      className="w-full px-4 py-3 rounded-xl bg-[var(--color-ink-700)] border border-[var(--color-line-dark)] text-white text-xs placeholder:text-[var(--color-neutral-500)] focus:outline-none focus:border-[var(--color-accent-500)] transition-colors text-left font-mono"
+                      dir="ltr"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-[var(--color-on-dark-muted)] mb-1.5">
+                      حوزه خدمات
+                    </label>
+                    <select
+                      value={formData.serviceType}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          serviceType: e.target.value,
+                        })
+                      }
+                      className="w-full px-4 py-3 rounded-xl bg-[var(--color-ink-700)] border border-[var(--color-line-dark)] text-white text-xs focus:outline-none focus:border-[var(--color-accent-500)] transition-colors"
+                    >
+                      <option value="سیستم هوشمند جرثقیل (LMI)">
+                        نصب، عیب‌یابی یا کالیبراسیون LMI
+                      </option>
+                      <option value="تعمیر و عیب‌یابی مدار هیدرولیک">
+                        تعمیر شیرهای پروپرشنال و هیدرولیک
+                      </option>
+                      <option value="تعمیرات برد و سنسور">
+                        تعمیر برد کنترلر و سنسورها
+                      </option>
+                      <option value="اعزام کارشناس به محل دستگاه">
+                        درخواست حضور و عیب‌یابی در محل
+                      </option>
+                      <option value="مشاوره فنی">
+                        مشاوره فنی و انتخاب قطعه
+                      </option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-[var(--color-on-dark-muted)] mb-1.5">
+                      شرح خلاصه اشکال یا نوع دستگاه (اختیاری)
+                    </label>
+                    <textarea
+                      rows={2}
+                      placeholder="مثال: خطای سنسور فشار یا لودسل جرثقیل..."
+                      value={formData.message}
+                      onChange={(e) =>
+                        setFormData({ ...formData, message: e.target.value })
+                      }
+                      className="w-full px-4 py-2.5 rounded-xl bg-[var(--color-ink-700)] border border-[var(--color-line-dark)] text-white text-xs placeholder:text-[var(--color-neutral-500)] focus:outline-none focus:border-[var(--color-accent-500)] transition-colors resize-none"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-[var(--color-accent-500)] hover:bg-[var(--color-accent-600)] text-white font-bold text-xs transition-all shadow-md cursor-pointer"
+                  >
+                    <Send className="w-4 h-4" />
+                    ارسال مستقیم در تلگرام
+                  </button>
+                </form>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Quick Contact Cards */}
-      <section className="relative -mt-8 pb-8 md:-mt-10 md:pb-10">
-        <div className="container mx-auto px-6 md:px-8 lg:px-10">
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {quickContactItems.map((item) => {
-              const Icon = item.icon;
-              const isLink = item.href !== "#";
-
-              const card = (
-                <div
-                  className={`group h-full rounded-[1.75rem] border ${item.border} bg-white p-6 shadow-[0_20px_50px_rgba(15,23,42,0.06)] transition-all hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(15,23,42,0.10)]`}
-                >
-                  <div
-                    className={`mb-5 flex h-14 w-14 items-center justify-center rounded-2xl ${item.bg} ${item.color}`}
-                  >
-                    <Icon size={26} />
-                  </div>
-
-                  <h3 className="text-lg font-black text-[#0a1a2f]">
-                    {item.title}
-                  </h3>
-
-                  <p className="mt-3 text-sm leading-7 text-slate-600">
-                    {item.description}
-                  </p>
-
-                  <div className="mt-5 text-base font-black leading-8 text-[#0a1a2f] break-words">
-                    {item.value}
-                  </div>
+      {/* دو باکس بزرگ و بالانس‌شده برای تماس و تلگرام */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* کارت ۱: تماس مستقیم */}
+          <a
+            href={`tel:${phoneNumber}`}
+            className="group bg-white rounded-3xl p-8 border border-[var(--color-line-bold)] shadow-[var(--shadow-sm)] hover:border-[var(--color-accent-400)] hover:shadow-xl transition-all duration-300 flex flex-col justify-between text-right"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-6">
+                <div className="w-14 h-14 rounded-2xl bg-[var(--color-accent-50)] text-[var(--color-accent-700)] border border-[var(--color-accent-100)] group-hover:bg-[var(--color-accent-500)] group-hover:text-white transition-colors flex items-center justify-center">
+                  <Phone className="w-7 h-7" />
                 </div>
-              );
+                <span className="text-xs font-bold px-3 py-1 rounded-full bg-[var(--color-accent-50)] text-[var(--color-accent-700)] border border-[var(--color-accent-200)]">
+                  تماس مستقیم
+                </span>
+              </div>
 
-              if (isLink) {
-                return (
-                  <a
-                    key={item.title}
-                    href={item.href}
-                    target={item.href.startsWith("http") ? "_blank" : undefined}
-                    rel={
-                      item.href.startsWith("http") ? "noreferrer" : undefined
-                    }
-                    className="block"
-                  >
-                    {card}
-                  </a>
-                );
-              }
+              <div className="space-y-2">
+                <h3 className="text-xl font-extrabold text-[var(--color-ink)] group-hover:text-[var(--color-accent-600)] transition-colors">
+                  ارتباط تلفنی
+                </h3>
+                <p
+                  className="text-2xl font-black text-[var(--color-ink)] font-mono"
+                  dir="ltr"
+                >
+                  {phoneDisplay}
+                </p>
+                <p className="text-xs sm:text-sm text-[var(--color-neutral-600)] leading-relaxed pt-2">
+                  جهت عیب‌یابی تلفنی، استعلام هزینه قطعات، مشاوره پیش از اعزام و
+                  هماهنگی حضور در محل کارگاه یا پروژه.
+                </p>
+              </div>
+            </div>
 
-              return <div key={item.title}>{card}</div>;
-            })}
-          </div>
+            <div className="mt-8 pt-4 border-t border-[var(--color-line)] flex items-center justify-between">
+              <span className="text-xs font-extrabold text-[var(--color-accent-700)] flex items-center gap-1 group-hover:underline">
+                برقراری تماس مستقیم
+                <ArrowUpLeft className="w-4 h-4" />
+              </span>
+              <span className="text-[11px] text-[var(--color-neutral-500)] flex items-center gap-1">
+                <Clock className="w-3.5 h-3.5" />
+                همه‌روزه ۸ الی ۲۰
+              </span>
+            </div>
+          </a>
+
+          {/* کارت ۲: پیام در تلگرام */}
+          <a
+            href={telegramUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="group bg-white rounded-3xl p-8 border border-[var(--color-line-bold)] shadow-[var(--shadow-sm)] hover:border-[var(--color-accent-400)] hover:shadow-xl transition-all duration-300 flex flex-col justify-between text-right"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-6">
+                <div className="w-14 h-14 rounded-2xl bg-[var(--color-neutral-100)] text-[var(--color-ink)] border border-[var(--color-line)] group-hover:bg-[var(--color-accent-500)] group-hover:text-white transition-colors flex items-center justify-center">
+                  <Send className="w-7 h-7" />
+                </div>
+                <span className="text-xs font-bold px-3 py-1 rounded-full bg-[var(--color-neutral-100)] text-[var(--color-neutral-700)] border border-[var(--color-line)]">
+                  ارسال مستندات
+                </span>
+              </div>
+
+              <div className="space-y-2">
+                <h3 className="text-xl font-extrabold text-[var(--color-ink)] group-hover:text-[var(--color-accent-600)] transition-colors">
+                  ارتباط در تلگرام
+                </h3>
+                <p className="text-sm font-bold text-[var(--color-accent-700)]">
+                  ارسال مستقیم فیلم و خطای دستگاه
+                </p>
+                <p className="text-xs sm:text-sm text-[var(--color-neutral-600)] leading-relaxed pt-2">
+                  ارسال پلاک دستگاه، دیاگرام سیستم هیدرولیک، کدهای نمایشگر و
+                  تصاویر مدار جهت بررسی دقیق و تخصصی.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-8 pt-4 border-t border-[var(--color-line)] flex items-center justify-between">
+              <span className="text-xs font-extrabold text-[var(--color-accent-700)] flex items-center gap-1 group-hover:underline">
+                شروع گفتگو در تلگرام
+                <ExternalLink className="w-4 h-4" />
+              </span>
+              <span className="text-[11px] text-[var(--color-neutral-500)]">
+                پاسخگویی در سریع‌ترین زمان
+              </span>
+            </div>
+          </a>
         </div>
       </section>
 
-      {/* Addresses */}
-      <section className="py-12 md:py-16">
-        <div className="container mx-auto px-6 md:px-8 lg:px-10">
-          <div className="mb-10 text-center">
-            <h2 className="text-2xl font-black text-[#0a1a2f] md:text-4xl">
-              نشانی‌های مجموعه
-            </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-500">
-              برای مراجعات حضوری، هماهنگی‌های اداری یا امور مرتبط با تولید و
-              بارگیری، اطلاعات هر دو موقعیت مجموعه در ادامه درج شده است.
-            </p>
-          </div>
-
-          <div className="grid gap-6 lg:grid-cols-2">
-            {addressItems.map((item) => {
-              const Icon = item.icon;
-              const isDark = item.tone === "dark";
-
-              return (
-                <div
-                  key={item.title}
-                  className={`relative overflow-hidden rounded-[2rem] border p-6 sm:p-8 ${
-                    isDark
-                      ? "border-[#0f213c] bg-[#07111f] text-white"
-                      : "border-slate-200 bg-slate-50 text-slate-800"
-                  }`}
-                >
-                  <div className="pointer-events-none absolute inset-0">
-                    <div
-                      className={`absolute top-0 h-40 w-40 rounded-full blur-3xl ${
-                        isDark
-                          ? "right-0 bg-[#c27829]/20"
-                          : "left-0 bg-sky-500/10"
-                      }`}
-                    />
-                  </div>
-
-                  <div className="relative z-10">
-                    <div
-                      className={`mb-5 flex h-16 w-16 items-center justify-center rounded-2xl ${
-                        isDark
-                          ? "bg-white/10 text-[#f0b56d]"
-                          : "bg-white text-[#0a1a2f] shadow-sm"
-                      }`}
-                    >
-                      <Icon size={30} />
-                    </div>
-
-                    <h3
-                      className={`text-2xl font-black ${
-                        isDark ? "text-white" : "text-[#0a1a2f]"
-                      }`}
-                    >
-                      {item.title}
-                    </h3>
-
-                    <p
-                      className={`mt-3 text-sm leading-7 ${
-                        isDark ? "text-slate-300" : "text-slate-600"
-                      }`}
-                    >
-                      {item.description}
-                    </p>
-
-                    <div
-                      className={`mt-6 rounded-2xl border p-5 text-sm leading-8 ${
-                        isDark
-                          ? "border-white/10 bg-white/5 text-slate-100"
-                          : "border-slate-200 bg-white text-slate-700"
-                      }`}
-                    >
-                      <div className="flex items-start gap-3">
-                        <MapPin
-                          size={18}
-                          className={`mt-1 shrink-0 ${
-                            isDark ? "text-[#f0b56d]" : "text-[#c27829]"
-                          }`}
-                        />
-                        <span>{item.value}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Support Items */}
-      <section className="bg-slate-50 py-16 md:py-20">
-        <div className="container mx-auto px-6 md:px-8 lg:px-10">
-          <div className="mb-12 text-center">
-            <h2 className="text-2xl font-black text-[#0a1a2f] md:text-4xl">
-              چه کمکی می‌توانیم بکنیم؟
-            </h2>
-            <p className="mx-auto mt-3 max-w-xl text-sm text-slate-500">
-              تیم فروش و پشتیبانی آماده پاسخگویی به درخواست‌های شما در زمینه
-              تامین، قیمت‌گذاری و هماهنگی سفارش است.
-            </p>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-3">
-            {supportItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <div
-                  key={item.title}
-                  className="rounded-[1.75rem] border border-slate-200 bg-white p-6 text-center shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
-                >
-                  <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0a1a2f] text-white">
-                    <Icon size={26} />
-                  </div>
-
-                  <h3 className="text-lg font-black text-[#0a1a2f]">
-                    {item.title}
-                  </h3>
-
-                  <p className="mt-3 text-sm leading-7 text-slate-600">
-                    {item.description}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="relative overflow-hidden bg-[#0a1a2f] py-16 text-white md:py-20">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-[-5rem] top-[-5rem] h-56 w-56 rounded-full bg-[#c27829]/15 blur-3xl" />
-          <div className="absolute right-[-4rem] bottom-[-5rem] h-56 w-56 rounded-full bg-sky-500/10 blur-3xl" />
-        </div>
-
-        <div className="relative z-10 container mx-auto px-6 text-center md:px-8 lg:px-10">
-          <h2 className="text-2xl font-black text-white md:text-4xl">
-            برای دریافت اطلاعات بیشتر با ما تماس بگیرید
+      {/* فرآیند شفاف اعزام و تعمیرات (۳ گام مینیمال) */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="text-center max-w-2xl mx-auto space-y-2 mb-12">
+          <span className="text-xs font-extrabold text-[var(--color-accent-700)]">
+            روال هماهنگی و عیب‌یابی
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-black text-[var(--color-ink)]">
+            فرآیند ارائه خدمات و اعزام به پروژه
           </h2>
+          <p className="text-xs sm:text-sm text-[var(--color-muted)] leading-relaxed">
+            بدون تشریفات اداری؛ متمرکز بر کاهش حداکثری زمان توقف دستگاه و بازگشت
+            به چرخه کار.
+          </p>
+        </div>
 
-          <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-slate-300">
-            در صورت نیاز به اطلاعات محصول، قیمت، شرایط تامین یا هماهنگی سفارش،
-            تیم فروش شیمی گستر سولفات آماده پاسخگویی است.
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {workflowSteps.map((step, idx) => {
+            const Icon = step.icon;
+            return (
+              <div
+                key={idx}
+                className="bg-white rounded-2xl p-6 border border-[var(--color-line-bold)] text-right space-y-3 shadow-[var(--shadow-xs)] relative"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="w-10 h-10 rounded-xl bg-[var(--color-neutral-100)] text-[var(--color-ink)] flex items-center justify-center font-black text-xs font-mono">
+                    {step.step}
+                  </div>
+                  <Icon className="w-5 h-5 text-[var(--color-accent-600)]" />
+                </div>
+
+                <h3 className="text-sm font-extrabold text-[var(--color-ink)] pt-1">
+                  {step.title}
+                </h3>
+
+                <p className="text-xs text-[var(--color-neutral-600)] leading-relaxed">
+                  {step.desc}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* بخش پایانی خلوت (CTA) */}
+      <section className="section-dark py-14 border-t border-[var(--color-line-dark)] circuit-texture">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center space-y-4">
+          <h2 className="text-xl sm:text-2xl font-black text-white">
+            دستگاه شما دچار توقف کاری شده است؟
+          </h2>
+          <p className="text-xs sm:text-sm text-[var(--color-on-dark-body)] leading-relaxed max-w-lg mx-auto">
+            جهت بررسی فوری و هماهنگی برای حضور در محل پروژه، همین حالا مستقیماً
+            تماس بگیرید.
           </p>
 
-          <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
+          <div className="pt-2 flex justify-center">
             <a
-              href="tel:09123063576"
-              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#c27829] px-6 py-4 text-sm font-black text-white transition-all hover:bg-[#d28735]"
+              href={`tel:${phoneNumber}`}
+              className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl bg-[var(--color-accent-500)] hover:bg-[var(--color-accent-600)] text-white font-extrabold text-sm transition-all shadow-md hover:shadow-lg"
             >
-              تماس مستقیم
-              <Phone size={18} />
+              <Phone className="w-4 h-4" />
+              تماس فوری
             </a>
-
-            <a
-              href="https://wa.me/989120909323"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-6 py-4 text-sm font-black text-white hover:bg-white/10"
-            >
-              پیام در واتس‌اپ
-              <MessageSquare size={18} />
-            </a>
-
-            <Link
-              href="/products"
-              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/15 bg-transparent px-6 py-4 text-sm font-black text-white hover:bg-white/10"
-            >
-              مشاهده محصولات
-              <ArrowLeft size={18} />
-            </Link>
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
