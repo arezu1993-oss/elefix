@@ -4,24 +4,11 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
 
-// ─── Tokens ───────────────────────────────────────────────────────────────────
-const t = {
-  accent: "oklch(0.52 0.17 155)",
-  accentHov: "oklch(0.42 0.16 155)",
-  accentSub: "oklch(0.96 0.04 155)",
-  onAccent: "oklch(0.99 0.00 0)",
-  n800: "oklch(0.28 0.01 250)",
-  n600: "oklch(0.48 0.01 250)",
-  n200: "oklch(0.88 0.01 250)",
-  n50: "oklch(0.98 0.00 0)",
-  white: "oklch(1.00 0.00 0)",
-  white85: "oklch(1.00 0.00 0 / 0.85)",
-} as const;
-
-// ─── Types ────────────────────────────────────────────────────────────────────
 interface Child {
   label: string;
+  desc?: string;
   href: string;
   icon: React.ReactNode;
 }
@@ -31,355 +18,190 @@ interface NavItem {
   children?: Child[];
 }
 
-// ─── Constants ────────────────────────────────────────────────────────────────
 const PHONE = "۰۹۳۷-۵۵۲-۵۷۰۷";
 const PHONE_TEL = "09375525707";
 const LOGO_SRC = "/images/logo-elefix.svg";
 
-// ─── Icons ────────────────────────────────────────────────────────────────────
 const Icons = {
-  // عیب‌یابی و تعمیر سیستم‌های ماشین‌آلات راهسازی و کشاورزی
   machinery: (
     <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
       fill="none"
-      aria-hidden="true"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
-      <circle cx="4" cy="12" r="2" stroke="currentColor" strokeWidth="1.3" />
-      <circle cx="12" cy="12" r="2" stroke="currentColor" strokeWidth="1.3" />
-      <path
-        d="M6 12h4M2 8h3l2-4h3l2 3"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M11 7l2 1v4"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <rect x="2" y="6" width="20" height="12" rx="2" />
+      <circle cx="12" cy="12" r="3" />
+      <path d="M6 12h.01M18 12h.01" />
     </svg>
   ),
-  // عیب‌یابی و تعمیر بردهای الکترونیکی
   board: (
     <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
       fill="none"
-      aria-hidden="true"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
-      <rect
-        x="1"
-        y="3"
-        width="14"
-        height="10"
-        rx="1.5"
-        stroke="currentColor"
-        strokeWidth="1.3"
-      />
-      <path
-        d="M4 3V2M8 3V2M12 3V2M4 13v1M8 13v1M12 13v1"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-      />
-      <rect x="4" y="6" width="3" height="2" rx="0.5" fill="currentColor" />
-      <rect x="9" y="6" width="3" height="2" rx="0.5" fill="currentColor" />
-      <path
-        d="M4 10h8"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-      />
+      <rect x="4" y="4" width="16" height="16" rx="2" />
+      <path d="M9 9h6v6H9zM9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3" />
     </svg>
   ),
-  // طراحی و توسعه و نصب سیستم‌های مانیتورینگ (HMI, LMI)
-  hmi: (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden="true"
-    >
-      <rect
-        x="1"
-        y="2"
-        width="14"
-        height="9"
-        rx="1.5"
-        stroke="currentColor"
-        strokeWidth="1.3"
-      />
-      <path
-        d="M6 11v2M10 11v2M4 13h8"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-      />
-      <path
-        d="M4 7l2-2 2 2 2-3 2 2"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  ),
-  // جرثقیل و ماشین‌آلات راهسازی و کشاورزی و صنعتی
   crane: (
     <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
       fill="none"
-      aria-hidden="true"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
-      <path
-        d="M3 14V5M3 5h9M3 5L7 2h5"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M12 5v4"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-      />
-      <rect
-        x="10"
-        y="9"
-        width="4"
-        height="3"
-        rx="0.5"
-        stroke="currentColor"
-        strokeWidth="1.2"
-      />
-      <circle cx="3" cy="14" r="1" fill="currentColor" />
+      <path d="M3 21h18M5 21V7l8-4 6 4v14M13 3v18M9 9h1M9 13h1M9 17h1" />
     </svg>
   ),
-  // عیب‌یابی و تعمیر برق موتورهای کامینز QSB
   engine: (
     <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
       fill="none"
-      aria-hidden="true"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
-      <rect
-        x="3"
-        y="5"
-        width="8"
-        height="6"
-        rx="1"
-        stroke="currentColor"
-        strokeWidth="1.3"
-      />
-      <path
-        d="M11 7h2M11 9h2M1 7h2M1 9h2"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-      />
-      <path
-        d="M6 5V3h4v2"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M7 8h2"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-      />
+      <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
     </svg>
   ),
-  // عیب‌یابی و تعمیر سیستم‌های سوخت‌رسانی کامان‌ریل
   fuel: (
     <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
       fill="none"
-      aria-hidden="true"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
-      <rect
-        x="2"
-        y="6"
-        width="9"
-        height="7"
-        rx="1"
-        stroke="currentColor"
-        strokeWidth="1.3"
-      />
-      <path
-        d="M5 6V4a2 2 0 014 0v2"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-      />
-      <path
-        d="M11 8h2a1 1 0 011 1v2a1 1 0 01-1 1h-2"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-      />
-      <path
-        d="M5.5 9.5h2M5.5 11.5h2"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-      />
+      <path d="M3 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18M15 10h4a2 2 0 0 1 2 2v7a3 3 0 0 1-6 0M3 14h12" />
     </svg>
   ),
-  // گواهی‌نامه‌ها
   certificate: (
     <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
       fill="none"
-      aria-hidden="true"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
-      <rect
-        x="1"
-        y="2"
-        width="14"
-        height="10"
-        rx="1.5"
-        stroke="currentColor"
-        strokeWidth="1.3"
-      />
-      <path
-        d="M4 6h8M4 9h5"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-      />
-      <circle cx="12" cy="13" r="2" stroke="currentColor" strokeWidth="1.2" />
-      <path
-        d="M10.5 15l-.5 1M13.5 15l.5 1"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-      />
+      <circle cx="12" cy="8" r="6" />
+      <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
     </svg>
   ),
-  // اختراع
   invention: (
     <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
       fill="none"
-      aria-hidden="true"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
-      <path
-        d="M8 1a4 4 0 014 4c0 1.6-.9 3-2.2 3.7V11H6.7A4 4 0 018 1A4 4 0 018 1z"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M6 12h4M6.5 13.5h3"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-      />
+      <path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z" />
     </svg>
   ),
-  // رزومه
   resume: (
     <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
       fill="none"
-      aria-hidden="true"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
-      <rect
-        x="3"
-        y="1"
-        width="10"
-        height="14"
-        rx="1.5"
-        stroke="currentColor"
-        strokeWidth="1.3"
-      />
-      <circle cx="8" cy="5" r="1.5" stroke="currentColor" strokeWidth="1.1" />
-      <path
-        d="M5 9h6M5 11.5h4"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-      />
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <polyline points="14 2 14 8 20 8" />
+      <line x1="16" y1="13" x2="8" y2="13" />
+      <line x1="16" y1="17" x2="8" y2="17" />
     </svg>
   ),
 };
 
-// ─── Nav data ─────────────────────────────────────────────────────────────────
 const NAV: NavItem[] = [
   { label: "خانه", href: "/" },
   {
-    label: "خدمات",
+    label: "خدمات تخصصی",
     href: "/services",
     children: [
       {
-        label: "عیب‌یابی و تعمیر سیستم‌های برقی ماشین‌آلات راهسازی و کشاورزی",
+        label: "سیستم‌های الکترونیک ماشین‌آلات سنگین",
+        desc: "عیب‌یابی میدانی ادوات راه‌سازی و کشاورزی",
         href: "/services/machinery-systems",
         icon: Icons.machinery,
       },
       {
-        label:
-          "عیب‌یابی و تعمیر بردهای الکترونیکی ماشین‌آلات راهسازی و کشاورزی",
+        label: "تعمیرات فوق‌تخصصی بردهای الکترونیکی (ECU)",
+        desc: "مهندسی معکوس و بازسازی قطعات نایاب تحریمی",
         href: "/services/board-repair",
         icon: Icons.board,
       },
       {
-        label: "طراحی و توسعه و نصب سیستم‌های مانیتورینگ (HMI, LMI)",
+        label: "سیستم‌های هوشمند و مانیتورینگ جرثقیل (LMI)",
+        desc: "طراحی، کالیبراسیون و ارتقای سنسورهای ایمنی",
         href: "/services/crane-industrial",
         icon: Icons.crane,
       },
       {
-        label: "عیب‌یابی و تعمیر برق موتورهای کامینز QSB",
+        label: "عیب‌یابی تخصصی موتورهای کامینز (Cummins)",
+        desc: "پروگرامینگ و پارامتریک سری‌های QSB و صنعتی",
         href: "/services/cummins-engine",
         icon: Icons.engine,
       },
       {
-        label: "عیب‌یابی و تعمیر سیستم‌های سوخت‌رسانی کامان‌ریل",
+        label: "سیستم‌های سوخت‌رسانی کامان‌ریل فشار قوی",
+        desc: "تست و عیب‌یابی دقیق انژکتورها و یونیت‌پمپ‌ها",
         href: "/services/common-rail",
         icon: Icons.fuel,
       },
     ],
   },
-  { label: "نمونه کارها", href: "/portfolio" },
+  { label: "پروژه‌ها و نمونه‌کارها", href: "/portfolio" },
   {
     label: "درباره ما",
     href: "/about",
     children: [
       {
-        label: "گواهی‌نامه‌ها",
+        label: "گواهی‌نامه‌ها و سرتیفیکیت‌ها",
+        desc: "مدارک تخصصی و سوابق اعتبارسنجی بین‌المللی",
         href: "/about/certificates",
         icon: Icons.certificate,
       },
       {
-        label: "اختراع",
+        label: "ثبت اختراع و نوآوری‌ها",
+        desc: "تکنولوژی انحصاری ثبت‌شده در سیستم‌های هیدرولیک",
         href: "/about/invention",
         icon: Icons.invention,
       },
       {
-        label: "رزومه",
+        label: "رزومه و سوابق دکتر شادمانی",
+        desc: "دکتری بیوسیستم و سوابق اجرایی در صنایع سنگین",
         href: "/about/resume",
         icon: Icons.resume,
       },
@@ -387,120 +209,85 @@ const NAV: NavItem[] = [
   },
 ];
 
-// ─── Scroll lock ──────────────────────────────────────────────────────────────
-function useScrollLock(active: boolean) {
-  useEffect(() => {
-    if (!active) return;
-    const html = document.documentElement;
-    const prevOverflow = html.style.overflow;
-    const prevPad = html.style.paddingRight;
-    const sbw = window.innerWidth - html.clientWidth;
-    html.style.overflow = "hidden";
-    if (sbw > 0) html.style.paddingRight = `${sbw}px`;
-    return () => {
-      html.style.overflow = prevOverflow;
-      html.style.paddingRight = prevPad;
-    };
-  }, [active]);
-}
-
-// ─── Desktop Dropdown ─────────────────────────────────────────────────────────
-function Dropdown({ item, onDark }: { item: NavItem; onDark: boolean }) {
+function Dropdown({ item }: { item: NavItem }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const close = (e: MouseEvent | FocusEvent) => {
+    const handleOutside = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node))
         setOpen(false);
     };
-    document.addEventListener("mousedown", close);
-    document.addEventListener("focusin", close);
-    return () => {
-      document.removeEventListener("mousedown", close);
-      document.removeEventListener("focusin", close);
-    };
+    document.addEventListener("mousedown", handleOutside);
+    return () => document.removeEventListener("mousedown", handleOutside);
   }, []);
 
-  const baseColor = onDark ? t.white : t.n800;
-
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative" onMouseLeave={() => setOpen(false)}>
       <button
         type="button"
-        aria-haspopup="true"
-        aria-expanded={open}
-        onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1 rounded-md px-1 py-0.5 text-sm font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2"
-        style={{
-          color: open ? t.accent : baseColor,
-          ["--tw-ring-color" as string]: t.accent,
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.color = t.accent;
-        }}
-        onMouseLeave={(e) => {
-          if (!open) e.currentTarget.style.color = baseColor;
-        }}
+        onMouseEnter={() => setOpen(true)}
+        onClick={() => setOpen((prev) => !prev)}
+        className="flex items-center gap-1.5 py-2 text-sm font-medium tracking-wide transition-colors text-neutral-300 hover:text-white"
       >
-        {item.label}
+        <span>{item.label}</span>
         <motion.svg
           animate={{ rotate: open ? 180 : 0 }}
-          transition={{ duration: 0.18 }}
-          width="13"
-          height="13"
-          viewBox="0 0 13 13"
+          transition={{ duration: 0.2 }}
+          width="11"
+          height="11"
+          viewBox="0 0 12 12"
           fill="none"
-          aria-hidden="true"
+          stroke="currentColor"
+          strokeWidth="2"
+          className="text-neutral-400"
         >
-          <path
-            d="M2.5 4.5l4 4 4-4"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          <path d="M2.5 4.5l3.5 3.5 3.5-3.5" />
         </motion.svg>
       </button>
 
       <AnimatePresence>
         {open && item.children && (
           <motion.div
-            key="dd"
-            initial={{ opacity: 0, y: -8, scale: 0.97 }}
+            initial={{ opacity: 0, y: 10, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -8, scale: 0.97 }}
-            transition={{ duration: 0.16, ease: "easeOut" }}
-            role="menu"
-            className="absolute right-0 top-full mt-2 rounded-xl border py-2 shadow-xl"
-            style={{
-              background: t.n50,
-              borderColor: t.n200,
-              boxShadow: "0 12px 32px -4px oklch(0.14 0.01 250 / 0.14)",
-              minWidth: "300px",
-            }}
+            exit={{ opacity: 0, y: 10, scale: 0.98 }}
+            transition={{ duration: 0.16 }}
+            className="absolute right-0 top-full pt-3 z-50 w-96"
+            dir="rtl"
           >
-            {item.children.map((child) => (
-              <Link
-                key={child.href}
-                href={child.href}
-                role="menuitem"
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-3 px-4 py-2.5 text-sm transition-colors duration-100 focus-visible:outline-none"
-                style={{ color: t.n800 }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = t.accentSub;
-                  e.currentTarget.style.color = t.accent;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "transparent";
-                  e.currentTarget.style.color = t.n800;
-                }}
-              >
-                <span className="flex-shrink-0">{child.icon}</span>
-                {child.label}
-              </Link>
-            ))}
+            <div
+              className="rounded-2xl border p-2.5 backdrop-blur-2xl shadow-2xl"
+              style={{
+                backgroundColor: "rgba(10, 14, 20, 0.95)",
+                borderColor: "rgba(255, 255, 255, 0.1)",
+                boxShadow:
+                  "0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+              }}
+            >
+              {item.children.map((child) => (
+                <Link
+                  key={child.href}
+                  href={child.href}
+                  onClick={() => setOpen(false)}
+                  className="flex items-start gap-3.5 rounded-xl p-3 transition-all hover:bg-white/[0.06] group"
+                >
+                  <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 group-hover:bg-emerald-500 group-hover:text-black transition-colors">
+                    {child.icon}
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-xs font-semibold text-neutral-200 group-hover:text-emerald-400 transition-colors">
+                      {child.label}
+                    </span>
+                    {child.desc && (
+                      <span className="mt-0.5 text-[11px] text-neutral-400 group-hover:text-neutral-300 leading-relaxed font-normal">
+                        {child.desc}
+                      </span>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -508,7 +295,6 @@ function Dropdown({ item, onDark }: { item: NavItem; onDark: boolean }) {
   );
 }
 
-// ─── Mobile Drawer ────────────────────────────────────────────────────────────
 function MobileDrawer({
   open,
   onClose,
@@ -516,207 +302,171 @@ function MobileDrawer({
   open: boolean;
   onClose: () => void;
 }) {
-  useScrollLock(open);
   const [expanded, setExpanded] = useState<string | null>(null);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   return (
     <AnimatePresence>
       {open && (
         <>
-          {/* Backdrop */}
           <motion.div
-            key="backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-60"
-            style={{ background: "oklch(0.14 0.01 250 / 0.55)" }}
             onClick={onClose}
-            aria-hidden="true"
+            className="fixed inset-0 z-[70] bg-black/80 backdrop-blur-md"
           />
 
-          {/* Drawer panel */}
           <motion.div
-            key="drawer"
             initial={{ x: "100%" }}
-            animate={{ x: "0%" }}
+            animate={{ x: 0 }}
             exit={{ x: "100%" }}
-            transition={{ type: "spring", stiffness: 320, damping: 32 }}
-            className="fixed inset-y-0 right-0 z-70 flex w-72 flex-col overflow-y-auto"
-            style={{ background: t.n50 }}
-            role="dialog"
-            aria-modal="true"
-            aria-label="منوی ناوبری"
+            transition={{ type: "spring", damping: 28, stiffness: 260 }}
+            className="fixed inset-y-0 right-0 z-[75] flex w-[85%] max-w-sm flex-col justify-between border-l border-white/10 p-6 text-white shadow-2xl bg-[#0c1017]"
             dir="rtl"
           >
-            {/* Drawer header */}
-            <div
-              dir="ltr"
-              className="flex items-center justify-start gap-2 border-b px-5 py-4"
-              style={{ borderColor: t.n200 }}
-            >
-              <div className="relative h-8 w-8">
-                <Image
-                  src={LOGO_SRC}
-                  alt="Elefix"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-              <div className="flex flex-col items-start leading-none gap-1">
-                <span
-                  className="text-sm font-bold"
-                  style={{
-                    color: t.n800,
-                    fontFamily: "'JetBrains Mono', 'Courier New', monospace",
-                    letterSpacing: "0.12em",
-                  }}
+            <div className="overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+              <div className="flex items-center justify-between border-b border-white/10 pb-5">
+                <div className="flex items-center gap-3" dir="ltr">
+                  <div className="relative h-8 w-8">
+                    <Image
+                      src={LOGO_SRC}
+                      alt="Elefix"
+                      fill
+                      className="object-contain brightness-0 invert"
+                    />
+                  </div>
+                  <div>
+                    <span className="block font-mono text-sm font-black tracking-widest text-white">
+                      ELEFIX
+                    </span>
+                    <span className="text-[9px] text-emerald-400 tracking-wider">
+                      INDUSTRIAL ELECTRONICS
+                    </span>
+                  </div>
+                </div>
+                <button
+                  onClick={onClose}
+                  className="rounded-lg border border-white/10 p-2 text-neutral-400 hover:text-white"
                 >
-                  ELEFIX
-                </span>
-                <span
-                  dir="rtl"
-                  className="text-[10px]"
-                  style={{ color: t.accent }}
-                >
-                  خدمات تخصصی
-                </span>
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M18 6L6 18M6 6l12 12" />
+                  </svg>
+                </button>
               </div>
-            </div>
 
-            {/* Nav links */}
-            <nav
-              className="flex-1 space-y-0.5 px-3 py-4"
-              aria-label="منوی اصلی"
-            >
-              {NAV.map((navItem) =>
-                navItem.children ? (
-                  <div key={navItem.href}>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setExpanded((v) =>
-                          v === navItem.href ? null : navItem.href,
-                        )
-                      }
-                      aria-expanded={expanded === navItem.href}
-                      className="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition-colors"
-                      style={{ color: t.n800 }}
+              <div className="my-4 flex items-center gap-2 rounded-lg bg-emerald-500/10 px-3 py-2 border border-emerald-500/20 text-xs text-emerald-400">
+                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span>پذیرش فعال پروژه‌های صنعتی و اعزام فوری</span>
+              </div>
+
+              <nav className="space-y-1">
+                {NAV.map((item) =>
+                  item.children ? (
+                    <div
+                      key={item.href}
+                      className="border-b border-white/5 pb-1"
                     >
-                      {navItem.label}
-                      <motion.svg
-                        animate={{
-                          rotate: expanded === navItem.href ? 180 : 0,
-                        }}
-                        transition={{ duration: 0.18 }}
-                        width="14"
-                        height="14"
-                        viewBox="0 0 14 14"
-                        fill="none"
-                        aria-hidden="true"
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpanded((prev) =>
+                            prev === item.href ? null : item.href,
+                          )
+                        }
+                        className="flex w-full items-center justify-between py-3 text-sm font-medium text-neutral-200 hover:text-emerald-400"
                       >
-                        <path
-                          d="M3 5l4 4 4-4"
+                        <span>{item.label}</span>
+                        <motion.svg
+                          animate={{ rotate: expanded === item.href ? 180 : 0 }}
+                          width="14"
+                          height="14"
+                          viewBox="0 0 14 14"
+                          fill="none"
                           stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </motion.svg>
-                    </button>
-
-                    <AnimatePresence>
-                      {expanded === navItem.href && (
-                        <motion.div
-                          key={`sub-${navItem.href}`}
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.2, ease: "easeOut" }}
-                          className="overflow-hidden"
                         >
-                          <div className="mb-1 pr-3 pt-0.5">
-                            {navItem.children.map((child) => (
+                          <path
+                            d="M3 5l4 4 4-4"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                          />
+                        </motion.svg>
+                      </button>
+                      <AnimatePresence>
+                        {expanded === item.href && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="overflow-hidden space-y-1 pb-2"
+                          >
+                            {item.children.map((sub) => (
                               <Link
-                                key={child.href}
-                                href={child.href}
+                                key={sub.href}
+                                href={sub.href}
                                 onClick={onClose}
-                                className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors"
-                                style={{ color: t.n600 }}
-                                onMouseEnter={(e) => {
-                                  e.currentTarget.style.color = t.accent;
-                                }}
-                                onMouseLeave={(e) => {
-                                  e.currentTarget.style.color = t.n600;
-                                }}
+                                className="flex items-center gap-3 rounded-lg py-2.5 px-3 text-xs text-neutral-300 hover:bg-white/5 hover:text-emerald-400"
                               >
-                                <span className="flex-shrink-0">
-                                  {child.icon}
+                                <span className="text-emerald-400">
+                                  {sub.icon}
                                 </span>
-                                {child.label}
+                                <span>{sub.label}</span>
                               </Link>
                             ))}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                ) : (
-                  <Link
-                    key={navItem.href}
-                    href={navItem.href}
-                    onClick={onClose}
-                    className="block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors"
-                    style={{ color: t.n800 }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.color = t.accent;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.color = t.n800;
-                    }}
-                  >
-                    {navItem.label}
-                  </Link>
-                ),
-              )}
-            </nav>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  ) : (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={onClose}
+                      className="block py-3 border-b border-white/5 text-sm font-medium text-neutral-200 hover:text-emerald-400"
+                    >
+                      {item.label}
+                    </Link>
+                  ),
+                )}
+              </nav>
+            </div>
 
-            {/* Drawer footer */}
-            <div
-              className="space-y-3 border-t px-5 py-4"
-              style={{ borderColor: t.n200 }}
-            >
+            <div className="space-y-2.5 pt-4 border-t border-white/10">
               <a
                 href={`tel:${PHONE_TEL}`}
-                className="flex items-center gap-2 text-sm font-medium"
-                style={{ color: t.accent }}
+                className="flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 py-3 text-xs font-medium text-neutral-200 transition hover:bg-white/10"
               >
                 <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
                   fill="none"
-                  aria-hidden="true"
+                  stroke="currentColor"
+                  strokeWidth="2"
                 >
-                  <path
-                    d="M2 3a1 1 0 011-1h2.5a1 1 0 01.97.757l.5 2a1 1 0 01-.28.98L5.5 6.38a9.08 9.08 0 004.12 4.12l.643-1.19a1 1 0 01.98-.28l2 .5A1 1 0 0114 10.5V13a1 1 0 01-1 1C6.373 14 2 9.627 2 4V3z"
-                    fill="currentColor"
-                  />
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                 </svg>
                 {PHONE}
               </a>
               <Link
                 href="/contact"
                 onClick={onClose}
-                className="block w-full rounded-lg px-4 py-2.5 text-center text-sm font-semibold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2"
-                style={{
-                  background: t.accent,
-                  color: t.onAccent,
-                  ["--tw-ring-color" as string]: t.accent,
-                }}
+                className="flex items-center justify-center rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-400 py-3 text-center text-xs font-bold text-neutral-950 transition hover:opacity-95 shadow-lg shadow-emerald-500/20"
               >
-                ارتباط با ما
+                ثبت درخواست مشاوره و پذیرش
               </Link>
             </div>
           </motion.div>
@@ -726,13 +476,13 @@ function MobileDrawer({
   );
 }
 
-// ─── Header ───────────────────────────────────────────────────────────────────
-export default function Header({ overlay = false }: { overlay?: boolean }) {
+export default function Header({ overlay = true }: { overlay?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const pathname = usePathname();
 
   const handleScroll = useCallback(() => {
-    setScrolled(window.scrollY > 24);
+    setScrolled(window.scrollY > 20);
   }, []);
 
   useEffect(() => {
@@ -741,170 +491,116 @@ export default function Header({ overlay = false }: { overlay?: boolean }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
-  const isScrolled = true;
-  const onDark = overlay && !isScrolled;
-  const navColor = onDark ? t.white : t.n800;
-  const phoneColor = onDark ? t.white85 : t.accent;
-  const iconColor = onDark ? t.white85 : t.n800;
-  const bgStyle: React.CSSProperties = isScrolled
-    ? {
-        background: "oklch(0.99 0.00 0 / 0.92)",
-        backdropFilter: "blur(14px) saturate(1.5)",
-        WebkitBackdropFilter: "blur(14px) saturate(1.5)",
-        borderBottom: `1px solid ${t.n200}`,
-        boxShadow: "0 1px 16px -2px oklch(0.14 0.01 250 / 0.07)",
-      }
-    : overlay
-      ? {
-          background:
-            "linear-gradient(to bottom, oklch(0.10 0.005 250 / 0.72) 0%, transparent 100%)",
-          borderBottom: "1px solid oklch(1 0 0 / 0.08)",
-          boxShadow: "none",
-        }
-      : {
-          background: t.white,
-          borderBottom: `1px solid ${t.n200}`,
-          boxShadow: "none",
-        };
+  // بررسی مسیر فعلی: آیا در صفحه اصلی هستیم؟
+  const isHomePage = pathname === "/";
+
+  // اگر در صفحه داخلی باشیم، یا اگر اسکرول شده باشد، هدر باید پس‌زمینه (Solid) داشته باشد.
+  const isSolid = !isHomePage || scrolled;
 
   return (
     <>
-      <motion.header
-        initial={{ y: 0, opacity: 1 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-        className="fixed inset-x-0 top-0 z-50 transition-all duration-300"
-        style={bgStyle}
+      <header
+        className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+          isSolid
+            ? "border-b border-white/10 backdrop-blur-xl shadow-2xl bg-[#0a0e14]/90"
+            : "border-b border-transparent bg-gradient-to-b from-black/85 via-black/35 to-transparent"
+        }`}
       >
         <div
-          className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6"
+          className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 sm:px-8"
           dir="rtl"
         >
-          {/* Logo */}
-          <Link
-            href="/"
-            aria-label="صفحه اصلی"
-            className="relative flex-shrink-0 rounded-md focus-visible:outline-none focus-visible:ring-2"
-            style={{ ["--tw-ring-color" as string]: t.accent }}
-          >
-            <div dir="ltr" className="flex items-center gap-2.5">
-              <div className="relative h-8 w-8">
-                <Image
-                  src={LOGO_SRC}
-                  alt="Elefix"
-                  fill
-                  priority
-                  className="object-contain"
-                  style={{
-                    filter: onDark ? "brightness(0) invert(1)" : "none",
-                    transition: "filter 0.3s",
-                  }}
-                />
-              </div>
-              <div className="flex flex-col items-start leading-none gap-1">
-                <span
-                  className="text-[15px] font-bold"
-                  style={{
-                    color: onDark ? t.white : t.n800,
-                    fontFamily: "'JetBrains Mono', 'Courier New', monospace",
-                    letterSpacing: "0.14em",
-                  }}
-                >
-                  ELEFIX
-                </span>
-                <span
-                  dir="rtl"
-                  className="text-[10px] font-medium"
-                  style={{ color: onDark ? "oklch(0.75 0.12 155)" : t.accent }}
-                >
-                  خدمات تخصصی
-                </span>
-              </div>
+          {/* Logo Brand */}
+          <Link href="/" className="flex items-center gap-3.5" dir="ltr">
+            <div className="relative h-9 w-9">
+              <Image
+                src={LOGO_SRC}
+                alt="Elefix"
+                fill
+                priority
+                className="object-contain brightness-0 invert"
+              />
+            </div>
+            <div className="flex flex-col items-start leading-none gap-1">
+              <span className="font-mono text-base font-black tracking-widest text-white">
+                ELEFIX
+              </span>
+              <span
+                dir="rtl"
+                className="text-[10px] font-semibold text-emerald-400"
+              >
+                عیب‌یابی و مهندسی معکوس
+              </span>
             </div>
           </Link>
 
-          {/* Desktop nav */}
-          <nav
-            className="hidden items-center gap-6 lg:flex"
-            aria-label="ناوبری اصلی"
-          >
-            {NAV.map((navItem) =>
-              navItem.children ? (
-                <Dropdown key={navItem.href} item={navItem} onDark={onDark} />
+          {/* Desktop Nav */}
+          <nav className="hidden items-center gap-7 lg:flex">
+            {NAV.map((item) =>
+              item.children ? (
+                <Dropdown key={item.href} item={item} />
               ) : (
                 <Link
-                  key={navItem.href}
-                  href={navItem.href}
-                  className="nav-link rounded-md px-1 py-0.5 text-sm font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2"
-                  style={{
-                    color: "var(--nav-c)",
-                    ["--nav-c" as string]: navColor,
-                    ["--tw-ring-color" as string]: t.accent,
-                  }}
+                  key={item.href}
+                  href={item.href}
+                  className="text-sm font-medium tracking-wide text-neutral-300 transition-colors hover:text-white"
                 >
-                  {navItem.label}
+                  {item.label}
                 </Link>
               ),
             )}
           </nav>
 
-          {/* Desktop CTA */}
-          <div className="hidden items-center gap-4 lg:flex">
+          {/* Desktop Right Action Area */}
+          <div className="hidden items-center gap-6 lg:flex">
             <a
               href={`tel:${PHONE_TEL}`}
-              className="text-sm font-medium transition-colors duration-150"
-              style={{ color: phoneColor }}
+              className="flex items-center gap-2 text-xs tracking-wider text-neutral-300 transition-colors hover:text-emerald-400"
             >
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+              </svg>
               {PHONE}
             </a>
+
+            {/* Industrial High-Tech Button */}
             <Link
               href="/contact"
-              className="rounded-lg px-4 py-2 text-sm font-semibold transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
-              style={{
-                background: t.accent,
-                color: t.onAccent,
-                ["--tw-ring-color" as string]: t.accent,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = t.accentHov;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = t.accent;
-              }}
+              className="relative inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-400 px-5 py-2.5 text-xs font-bold text-neutral-950 transition-all hover:shadow-[0_0_24px_rgba(0,179,116,0.35)] active:scale-95"
             >
-              ارتباط با ما
+              ارتباط مستقیم
             </Link>
           </div>
 
-          {/* Hamburger */}
+          {/* Mobile Hamburger */}
           <button
             type="button"
-            className="flex h-11 w-11 items-center justify-center rounded-lg transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 active:scale-95 lg:hidden"
-            style={{
-              color: iconColor,
-              ["--tw-ring-color" as string]: t.accent,
-            }}
             onClick={() => setDrawerOpen(true)}
+            className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition hover:bg-white/10 lg:hidden"
             aria-label="باز کردن منو"
-            aria-expanded={drawerOpen}
           >
             <svg
               width="22"
               height="22"
-              viewBox="0 0 22 22"
+              viewBox="0 0 24 24"
               fill="none"
-              aria-hidden="true"
+              stroke="currentColor"
+              strokeWidth="2"
             >
-              <path
-                d="M3 6h16M3 11h16M3 16h16"
-                stroke="currentColor"
-                strokeWidth="1.75"
-                strokeLinecap="round"
-              />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="18" x2="21" y2="18" />
             </svg>
           </button>
         </div>
-      </motion.header>
+      </header>
 
       <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
     </>

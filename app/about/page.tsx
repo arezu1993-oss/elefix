@@ -1,232 +1,204 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import {
-  BadgeCheck,
-  FlaskConical,
-  MessageCircle,
-  ShieldCheck,
-  Factory,
-  Boxes,
-  Sparkles,
-  Zap,
-} from "lucide-react";
 
-const whatsappPhone = "989120909323";
+const PHONE = "۰۹۳۷-۵۵۲-۵۷۰۷";
+const PHONE_TEL = "09375525707";
 
-const focusItems = [
+const SECTIONS = [
   {
-    icon: FlaskConical,
-    title: "خلوص بالا",
-    description: "تضمین درصد مس و حلالیت کامل در گریدهای کشاورزی و صنعتی.",
+    num: "۱",
+    category: "بنیان‌گذار و رهبری فنی",
+    title: "دکتر محمد شادمانی",
+    desc: "دکتری مکانیک بیوسیستم و ۹ سال سابقه حل بحران ماشین‌آلات سنگین در صنایع نفت، فولاد و بنادر.",
+    href: "/about/resume",
+    btnText: "مشاهده پروفایل و سوابق",
+    badge: "مدیریت فنی",
   },
   {
-    icon: ShieldCheck,
-    title: "آنالیز دقیق",
-    description: "ارائه برگه آنالیز معتبر برای تمامی محموله‌های ارسالی.",
+    num: "۲",
+    category: "فناوری و مالکیت فکری",
+    title: "سامانه پایش بار و واژگونی",
+    desc: "اختراع ثبت‌شده برای تله‌متری هوشمند بی‌سیم و پیشگیری لحظه‌ای از واژگونی جرثقیل‌های سنگین.",
+    href: "/about/invention",
+    btnText: "بررسی مستندات اختراع",
+    badge: "ثبت رسمی اختراع",
   },
   {
-    icon: Factory,
-    title: "تأمین پایدار",
-    description: "توانایی تأمین مداوم مواد اولیه برای خطوط تولید بزرگ.",
+    num: "۳",
+    category: "صلاحیت‌های تخصصی",
+    title: "گواهینامه‌های بین‌المللی",
+    desc: "مدارک رسمی هیدرولیک پروپرشنال، شبکه‌های صنعتی CAN-Bus و الکترونیک قدرت از مراجعی چون Festo آلمان.",
+    href: "/about/certificates",
+    btnText: "استعلام تاییدیه‌ها",
+    badge: "Festo Didactic",
+  },
+];
+
+const STATS = [
+  {
+    value: "۹+",
+    label: "سال تجربه میدانی",
+    sub: "در پالایشگاه‌ها، بنادر و معادن",
   },
   {
-    icon: Boxes,
-    title: "بسته‌بندی سفارشی",
-    description: "امکان ارائه در کیسه‌های ۲۵ کیلویی یا جامبوبگ ۱ تنی.",
+    value: "۱۰۰٪",
+    label: "مهندسی معکوس برد",
+    sub: "احیای قطعات نایاب و بدون نقشه",
+  },
+  {
+    value: "۱",
+    label: "اختراع ملی ثبت‌شده",
+    sub: "سامانه هوشمند ایمنی جرثقیل",
+  },
+  {
+    value: "۲۴h",
+    label: "میانگین عیب‌یابی",
+    sub: "کاهش حداکثری خواب ماشین (Downtime)",
   },
 ];
 
 export default function AboutPage() {
-  const whatsappUrl = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent("سلام، جهت استعلام قیمت محصولات و همکاری تجاری پیام می‌دهم.")}`;
-
   return (
-    // حذف pt-20 با استفاده از منفی کردن مارجین برای چسبیدن به هدر
-    <main className="overflow-hidden bg-[#fcfdfe] font-vazir text-slate-900 -mt-20">
-      {/* Hero Section */}
-      <section className="relative bg-[#07111f] px-4 pt-32 pb-20 text-white sm:px-6 lg:px-10 lg:pt-48 lg:pb-32">
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute right-[-12rem] top-[-10rem] h-96 w-96 rounded-full bg-[#c27829]/20 blur-3xl" />
-          <div className="absolute bottom-[-14rem] left-[-10rem] h-[28rem] w-[28rem] rounded-full bg-blue-500/10 blur-3xl" />
-          <div className="absolute inset-0 opacity-[0.03] [background-image:radial-gradient(#fff_1px,transparent_1px)] [background-size:32px_32px]" />
+    <main
+      className="min-h-screen bg-[#f8fafc] text-slate-800 pt-28 pb-20 selection:bg-emerald-600 selection:text-white"
+      dir="rtl"
+    >
+      {/* هدر صفحه: خلوت، خوانا و با وقار سازمانی */}
+      <section className="relative mx-auto max-w-6xl px-6 lg:px-8 mb-16 lg:mb-24">
+        {/* مسیر راهنما (Breadcrumb) */}
+        <div className="flex items-center gap-2 text-xs font-medium text-slate-400 mb-8">
+          <Link href="/" className="hover:text-emerald-600 transition-colors">
+            خانه
+          </Link>
+          <span>/</span>
+          <span className="text-slate-700 font-semibold">درباره ما</span>
         </div>
 
-        <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-12">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="lg:col-span-7 text-center lg:text-right"
-          >
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/10 px-4 py-2 text-xs font-bold text-[#f0b56d] md:text-sm">
-              <Sparkles size={16} />
-              استاندارد جهانی در محصولات سولفاته
-            </div>
-
-            <h1 className="text-3xl font-black leading-[1.5] md:text-4xl lg:text-6xl lg:leading-[1.3]">
-              دقت در <span className="text-[#f0b56d]">تولید</span>،<br />
-              تداوم در <span className="text-[#f0b56d]">تأمین</span>.
-            </h1>
-
-            <p className="mt-6 mx-auto lg:mx-0 max-w-2xl text-base leading-8 text-slate-300 md:text-lg md:leading-9">
-              شیمی گستر سولفات با بهره‌گیری از دانش متخصصان شیمی، به عنوان بازوی
-              تأمین مواد اولیه در کنار صنایع ایستاده است. ما بر کیفیت محصول
-              نهایی شما حساس هستیم.
-            </p>
-
-            <div className="mt-10 flex flex-col sm:flex-row justify-center lg:justify-start gap-4">
-              <a
-                href={whatsappUrl}
-                className="flex h-14 items-center justify-center gap-3 rounded-2xl bg-[#c27829] px-8 font-black text-white transition hover:bg-[#a86522] hover:shadow-lg hover:shadow-amber-900/20"
-              >
-                <MessageCircle size={20} />
-                مشاوره و استعلام قیمت
-              </a>
-              <Link
-                href="/products"
-                className="flex h-14 items-center justify-center gap-3 rounded-2xl border border-white/20 bg-white/5 px-8 font-black text-white backdrop-blur-sm transition hover:bg-white/10"
-              >
-                بررسی آنالیز محصولات
-              </Link>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.2 }}
-            className="relative lg:col-span-5"
-          >
-
-            <div className="relative aspect-square lg:aspect-[4/5] overflow-hidden rounded-[2.5rem] border border-white/10 p-2 shadow-2xl shadow-blue-900/20">
-              <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#07111f] via-transparent to-transparent" />
-              <Image
-                src="/images/about-f.jpg"
-                alt="خلوص محصول سولفات مس"
-                fill
-                className="object-cover"
-                priority
-              />
-
-              <div className="absolute bottom-4 left-4 right-4 z-20 rounded-2xl border border-white/10 bg-white/5 p-4 md:bottom-8 md:left-8 md:right-8 md:p-6 backdrop-blur-md">
-                <div className="flex items-center gap-4">
-                  <div className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-xl bg-[#f0b56d] text-[#07111f]">
-                    <Zap size={24} fill="currentColor" />
-                  </div>
-                  <div>
-                    <p className="text-[10px] md:text-xs font-bold text-amber-200">
-                      تضمین کیفیت
-                    </p>
-                    <p className="text-sm md:text-lg font-black text-white">
-                      خلوص بالای 94 %
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+        {/* برچسب و تیتر اصلی */}
+        <div className="max-w-3xl">
+          <span className="inline-block text-xs font-bold tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-200/60 rounded-full px-3.5 py-1 mb-5">
+            هویت مهندسی الفیکس
+          </span>
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 leading-tight tracking-tight mb-6">
+            پیشگام مهندسی معکوس و احیای الکترونیک ماشین‌آلات سنگین
+          </h1>
+          <p className="text-base sm:text-lg text-slate-600 font-normal leading-relaxed">
+            الفیکس نقطه پیوند دانش آکادمیک با نیازهای حیاتی صنعت است؛ بازگرداندن
+            سریع ماشین‌آلات فوق‌سنگین به خط تولید، بدون وابستگی به واردات برد و
+            قطعات تحریمی.
+          </p>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="relative z-20 -mt-10 px-4 sm:px-6 lg:px-10">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
-            {[
-              { label: "ظرفیت تأمین ماهانه", value: "۲۵۰+ تُن" },
-              { label: "مشتریان صنعتی فعال", value: "۱۲۰+" },
-              { label: "خلوص محصولات", value: "۹۸٪ - ۹۴" },
-              { label: "ارسال به سراسر کشور", value: "۳۱" },
-            ].map((stat, i) => (
-              <div
-                key={i}
-                className="rounded-2xl md:rounded-3xl border border-slate-100 bg-white p-4 md:p-6 text-center shadow-xl shadow-slate-200/40"
-              >
-                <p className="text-xl font-black text-[#0a1a2f] md:text-3xl">
+      {/* سه بخش اصلی (Three Pillars): تمیز، کارت‌های سفید با کانتراست بالا */}
+      <section className="mx-auto max-w-6xl px-6 lg:px-8 mb-20 lg:mb-28">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          {SECTIONS.map((item) => (
+            <div
+              key={item.num}
+              className="group relative bg-white rounded-2xl border border-slate-200/80 p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(16,185,129,0.08)] hover:border-emerald-500/40 transition-all duration-300 flex flex-col justify-between"
+            >
+              <div>
+                {/* شماره و برچسب بالا */}
+                <div className="flex items-center justify-between mb-8">
+                  <span className="text-3xl font-black text-slate-300 group-hover:text-emerald-600 transition-colors">
+                    {item.num}
+                  </span>
+                  <span className="text-xs font-semibold text-slate-500 bg-slate-100 group-hover:bg-emerald-50 group-hover:text-emerald-700 px-3 py-1 rounded-md transition-colors">
+                    {item.badge}
+                  </span>
+                </div>
+
+                <div className="text-xs font-medium text-emerald-600 mb-2">
+                  {item.category}
+                </div>
+
+                <h3 className="text-xl font-bold text-slate-900 mb-4 leading-snug">
+                  {item.title}
+                </h3>
+
+                <p className="text-sm text-slate-600 font-light leading-relaxed mb-6">
+                  {item.desc}
+                </p>
+              </div>
+
+              {/* دکمه انتقال */}
+              <div className="pt-6 border-t border-slate-100">
+                <Link
+                  href={item.href}
+                  className="inline-flex items-center gap-2 text-sm font-bold text-slate-900 group-hover:text-emerald-600 transition-colors"
+                >
+                  <span>{item.btnText}</span>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    className="transition-transform group-hover:-translate-x-1.5"
+                  >
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                  </svg>
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* بخش آمار و دستاوردها: استایل الهام‌گرفته از گزارش‌های صنعتی Yutong */}
+      <section className="mx-auto max-w-6xl px-6 lg:px-8 mb-20 lg:mb-28">
+        <div className="bg-white rounded-3xl border border-slate-200/80 p-8 sm:p-12 shadow-[0_4px_24px_rgba(0,0,0,0.03)]">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
+            {STATS.map((stat, idx) => (
+              <div key={idx} className="flex flex-col">
+                <span className="text-3xl sm:text-5xl font-black text-emerald-600 tracking-tight mb-2">
                   {stat.value}
-                </p>
-                <p className="mt-1 text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wide">
+                </span>
+                <span className="text-base font-bold text-slate-900 mb-1">
                   {stat.label}
-                </p>
+                </span>
+                <span className="text-xs text-slate-500 font-light leading-normal">
+                  {stat.sub}
+                </span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Story Content */}
-      <section className="px-4 py-20 lg:py-32 sm:px-6 lg:px-10">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid gap-16 lg:grid-cols-2 lg:items-start">
-            <div>
-              <span className="font-black text-[#c27829] tracking-widest text-sm uppercase">
-                داستان ما
-              </span>
-              <h2 className="mt-4 text-3xl font-black leading-tight text-[#0a1a2f] md:text-4xl">
-                تأمین تخصصی برای <br className="hidden md:block" /> زیرساخت‌های
-                کشاورزی و صنعتی
-              </h2>
-              <div className="mt-8 space-y-6 text-base md:text-lg leading-8 md:leading-9 text-slate-600">
-                <p>
-                  مجموعه{" "}
-                  <strong className="text-slate-900">شیمی گستر سولفات</strong>{" "}
-                  با درک عمیق از نیاز صنایع به مواد اولیه باکیفیت، فعالیت خود را
-                  بر تولید و توزیع تخصصی ترکیبات سولفاته متمرکز کرده است.
-                </p>
-                <p>
-                  ما معتقدیم که بقای یک واحد تولیدی به کیفیت مواد اولیه آن
-                  وابسته است. به همین دلیل، تمامی فرآیندهای تأمین ما تحت نظارت
-                  دقیق آزمایشگاهی انجام می‌شود تا محصولی که به دست مصرف‌کننده
-                  می‌رسد، فراتر از استانداردهای معمول باشد.
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 gap-4 md:gap-6 sm:grid-cols-2">
-              {focusItems.map((item, index) => (
-                <motion.div
-                  key={index}
-                  whileHover={{ y: -5 }}
-                  className="rounded-3xl border border-slate-100 bg-white p-6 md:p-8 shadow-lg shadow-slate-100/50"
-                >
-                  <item.icon className="mb-4 text-[#c27829]" size={32} />
-                  <h3 className="text-lg md:text-xl font-black text-[#0a1a2f]">
-                    {item.title}
-                  </h3>
-                  <p className="mt-3 text-xs md:text-sm leading-6 md:leading-7 text-slate-500">
-                    {item.description}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
+      {/* باکس کال‌تو‌اکشن (CTA) شیک و باوقار شرکتی */}
+      {/* باکس کال‌تو‌اکشن (CTA) اصلاح‌شده */}
+      <section className="mx-auto max-w-6xl px-6 lg:px-8">
+        <div className="relative overflow-hidden rounded-3xl bg-slate-900 p-8 sm:p-12 lg:p-14 flex flex-col lg:flex-row lg:items-center justify-between gap-8 shadow-2xl border border-slate-800">
+          <div className="max-w-2xl">
+            {/* اضافه کردن صریح text-white برای غلبه بر استایل عمومی h2 */}
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-3 leading-snug">
+              با بن‌بست در عیب‌یابی یا کمبود قطعه مواجه‌اید؟
+            </h2>
+            <p className="text-sm sm:text-base text-slate-300 font-light leading-relaxed">
+              پیش از تحمیل هزینه‌های سنگین توقف پروژه یا واردات بردهای
+              گران‌قیمت، با تیم فنی الفیکس مشورت کنید.
+            </p>
           </div>
-        </div>
-      </section>
 
-      {/* CTA Final */}
-      <section className="px-4 pb-20 sm:px-6 lg:px-10">
-        <div className="mx-auto max-w-5xl rounded-[2.5rem] md:rounded-[3rem] bg-[#0a1a2f] p-8 md:p-16 text-center text-white shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-[#c27829]/10 blur-3xl rounded-full" />
-          <BadgeCheck
-            className="relative z-10 mx-auto text-[#f0b56d]"
-            size={48}
-          />
-          <h2 className="relative z-10 mt-6 text-2xl font-black md:text-4xl">
-            شروع همکاری استراتژیک
-          </h2>
-          <p className="relative z-10 mt-6 text-sm md:text-lg text-slate-400 max-w-2xl mx-auto">
-            اگر برای خط تولید یا توزیع خود به یک تأمین‌کننده ثابت و متعهد نیاز
-            دارید، ما آماده گفتگو هستیم.
-          </p>
-          <div className="relative z-10 mt-10 flex flex-col justify-center gap-4 sm:flex-row">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 shrink-0">
             <a
-              href={whatsappUrl}
-              className="flex h-14 items-center justify-center rounded-2xl bg-[#c27829] px-10 font-black text-white transition hover:bg-[#a86522] shadow-xl shadow-amber-900/20"
+              href="tel:09375525707"
+              className="inline-flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 px-6 py-3.5 text-sm font-bold text-white transition-colors"
             >
-              درخواست آنالیز و لیست قیمت
+              <span dir="ltr">
+                ۰۹۳۷-۵۵۲-۵۷۰۷
+              </span>
             </a>
+            <Link
+              href="/contact"
+              className="inline-flex items-center justify-center rounded-xl bg-emerald-500 hover:bg-emerald-400 px-6 py-3.5 text-sm font-bold text-slate-950 transition-colors shadow-lg shadow-emerald-500/20"
+            >
+              ثبت درخواست اعزام و مشاوره
+            </Link>
           </div>
         </div>
       </section>

@@ -1,257 +1,149 @@
 "use client";
 
-import { motion, Variants } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView, Variants } from "framer-motion";
+import { Factory, Tractor, Building2, Wheat, Wrench } from "lucide-react";
 
-const industries = [
+const targetIndustries = [
+  {
+    id: "oil-gas",
+    title: "نفت، گاز و پتروشیمی",
+    description: "پالایشگاه‌ها، شرکت‌های ملی و ناوگان حفاری",
+    icon: Factory,
+  },
+  {
+    id: "mining-roads",
+    title: "معادن و راه‌سازی",
+    description: "پیمانکاران عمرانی و ماشین‌آلات سنگین",
+    icon: Tractor,
+  },
   {
     id: "municipality",
-    title: "شهرداری",
-    icon: (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={1.5}
-        className="w-7 h-7"
-        aria-hidden
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M2.25 21h19.5M9 3.75H4.5v17.25H9M9 3.75h6M9 3.75V21m6-17.25h4.5V21H15M15 3.75V21m-6 0h6M9 8.25h.008v.008H9V8.25zm0 3.75h.008v.008H9V12zm0 3.75h.008v.008H9v-.008zm6-7.5h.008v.008H15V8.25zm0 3.75h.008v.008H15V12zm0 3.75h.008v.008H15v-.008z"
-        />
-      </svg>
-    ),
+    title: "شهرداری و راهداری",
+    description: "ناوگان خدمات شهری و ماشین‌آلات جاده‌ای",
+    icon: Building2,
   },
   {
-    id: "roads",
-    title: "راهداری",
-    icon: (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={1.5}
-        className="w-7 h-7"
-        aria-hidden
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.-6.677v6.677m0 4.5v-4.5m0 0h-12v6.677m0 4.5v-4.5m0 0h-12"
-        />
-      </svg>
-    ),
-  },
-  {
-    id: "individuals",
-    title: "اشخاص حقیقی",
-    icon: (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={1.5}
-        className="w-7 h-7"
-        aria-hidden
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-        />
-      </svg>
-    ),
-  },
-  {
-    id: "agro",
+    id: "agriculture",
     title: "کشت و صنعت",
-    icon: (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={1.5}
-        className="w-7 h-7"
-        aria-hidden
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
-        />
-      </svg>
-    ),
+    description: "تراکتورها، کمباین‌ها و مجتمع‌های دامپروری",
+    icon: Wheat,
   },
   {
-    id: "oil",
-    title: "نفت و گاز",
-    icon: (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={1.5}
-        className="w-7 h-7"
-        aria-hidden
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z"
-        />
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z"
-        />
-      </svg>
-    ),
+    id: "garages",
+    title: "گاراژها و تعمیرگاه‌ها",
+    description: "پشتیبانی تخصصی الکترونیک برای همکاران مکانیک",
+    icon: Wrench,
   },
 ];
 
-const container: Variants = {
-  hidden: {},
+const containerVariant: Variants = {
+  hidden: { opacity: 0 },
   visible: {
+    opacity: 1,
     transition: {
-      staggerChildren: 0.1,
+      staggerChildren: 0.08,
     },
   },
 };
 
-const cardVariant: Variants = {
-  hidden: { opacity: 0, y: 28 },
+const itemVariant: Variants = {
+  hidden: { opacity: 0, y: 15 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
       duration: 0.45,
-      ease: "easeOut",
+      ease: [0.25, 0.1, 0.25, 1],
     },
   },
 };
 
 export default function ClientsSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const inView = useInView(sectionRef, { once: true, margin: "-40px" });
+
   return (
     <section
+      ref={sectionRef}
       dir="rtl"
-      className="relative py-24 px-4 overflow-hidden bg-[oklch(97%_0.008_145)]"
+      className="relative py-8 sm:py-20 bg-white border-t border-slate-200/60 overflow-hidden"
     >
-      {/* Texture blobs */}
+      {/* پترن نقطه‌ای ظریف مهندسی */}
       <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-[0.025]"
         style={{
-          backgroundImage: [
-            "radial-gradient(ellipse 70% 50% at 15% 60%, oklch(88% 0.06 145 / 0.15) 0%, transparent 100%)",
-            "radial-gradient(ellipse 50% 40% at 85% 20%, oklch(85% 0.04 145 / 0.1) 0%, transparent 100%)",
-          ].join(", "),
+          backgroundImage:
+            "radial-gradient(circle at 2px 2px, #0f172a 1px, transparent 0)",
+          backgroundSize: "28px 28px",
         }}
       />
 
-      <div className="relative z-10 max-w-6xl mx-auto">
-        {/* Heading */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* هدر بخش (پدینگ و فواصل فشرده در موبایل) */}
         <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.45, ease: "easeOut" }}
-          className="text-center mb-14"
+          initial={{ opacity: 0, y: 12 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
+          className="text-center mb-6 sm:mb-12"
         >
-          <div
-            aria-hidden
-            className="mx-auto w-10 h-[3px] rounded-full mb-5"
-            style={{
-              background:
-                "linear-gradient(90deg, oklch(52% 0.16 145), oklch(62% 0.18 155))",
-            }}
-          />
-          <h2
-            className="text-3xl md:text-4xl font-bold leading-snug"
-            style={{ color: "oklch(16% 0.02 145)" }}
-          >
-            صنایع و شرکت‌هایی که به آن‌ها خدمات ارائه می‌کنیم
+          <div className="mx-auto w-10 sm:w-12 h-1 bg-gradient-to-r from-emerald-600 to-emerald-400 rounded-full mb-3 sm:mb-4" />
+          <h2 className="text-xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight mb-2 sm:mb-3">
+            صنایع و همکاران{" "}
+            <span className="text-emerald-600 font-light">هدف ما</span>
           </h2>
+          <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto leading-relaxed">
+            پشتیبانی و خدمات تخصصی الکترونیک برای ماشین‌آلات سنگین صنایع حیاتی
+            کشور، پروژه‌های عمرانی و همکاران فنی.
+          </p>
         </motion.div>
 
-        {/* Grid */}
-        <motion.ul
-          variants={container}
+        {/* گرید کارت‌ها: در موبایل ۲ ستونه، کارت آخر تمام‌عرض، در دسکتاپ ۵ ستونه */}
+        <motion.div
+          variants={containerVariant}
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 list-none p-0 m-0"
+          animate={inView ? "visible" : "hidden"}
+          className="grid grid-cols-2 lg:grid-cols-5 gap-2.5 sm:gap-4 lg:gap-5"
         >
-          {industries.map((item) => (
-            <motion.li key={item.id} variants={cardVariant} className="group">
-              <div
-                className="relative flex flex-col items-center gap-4 rounded-2xl px-5 py-8 h-full cursor-default select-none overflow-hidden transition-[border-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-1.5"
-                style={{
-                  background: "oklch(100% 0 0)",
-                  border: "1.5px solid oklch(90% 0.03 145)",
-                  boxShadow:
-                    "0 1px 3px oklch(0% 0 0 / 0.05), 0 3px 12px oklch(52% 0.16 145 / 0.05)",
-                }}
-                onMouseEnter={(e) => {
-                  const el = e.currentTarget as HTMLDivElement;
-                  el.style.borderColor = "oklch(52% 0.16 145)";
-                  el.style.boxShadow =
-                    "0 8px 28px oklch(52% 0.16 145 / 0.15), 0 2px 6px oklch(0% 0 0 / 0.06)";
-                }}
-                onMouseLeave={(e) => {
-                  const el = e.currentTarget as HTMLDivElement;
-                  el.style.borderColor = "oklch(90% 0.03 145)";
-                  el.style.boxShadow =
-                    "0 1px 3px oklch(0% 0 0 / 0.05), 0 3px 12px oklch(52% 0.16 145 / 0.05)";
-                }}
-              >
-                {/* Accent bar */}
-                <div
-                  aria-hidden
-                  className="absolute top-0 inset-x-0 h-[3px] rounded-b-full origin-right scale-x-[0.3] transition-transform duration-300 group-hover:scale-x-100"
-                  style={{
-                    background:
-                      "linear-gradient(90deg, oklch(52% 0.16 145), oklch(62% 0.18 155))",
-                  }}
-                />
+          {targetIndustries.map((item, index) => {
+            const Icon = item.icon;
+            const isLastOnMobile = index === 4;
 
-                {/* Icon */}
+            return (
+              <motion.div
+                key={item.id}
+                variants={itemVariant}
+                className={`group flex rounded-xl sm:rounded-2xl bg-white border border-slate-200/90 shadow-sm transition-all duration-300 hover:shadow-lg hover:border-emerald-300 hover:-translate-y-1 ${
+                  isLastOnMobile
+                    ? "col-span-2 lg:col-span-1 flex-row items-center text-right p-3.5 sm:p-5 sm:flex-col sm:text-center gap-3 sm:gap-0"
+                    : "flex-col items-center text-center p-3.5 sm:p-5"
+                }`}
+              >
+                {/* ظرف آیکون فشرده */}
                 <div
-                  className="flex items-center justify-center w-14 h-14 rounded-xl transition-colors duration-200"
-                  style={{
-                    background: "oklch(95% 0.012 145)",
-                    color: "oklch(42% 0.14 145)",
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLDivElement).style.background =
-                      "oklch(90% 0.04 145)";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLDivElement).style.background =
-                      "oklch(95% 0.012 145)";
-                  }}
+                  className={`flex shrink-0 items-center justify-center rounded-lg sm:rounded-xl bg-slate-50 border border-slate-100 text-slate-500 transition-colors duration-300 group-hover:bg-emerald-50 group-hover:text-emerald-600 group-hover:border-emerald-200 ${
+                    isLastOnMobile
+                      ? "w-10 h-10 sm:w-14 sm:h-14 sm:mb-3.5"
+                      : "w-10 h-10 sm:w-14 sm:h-14 mb-2.5 sm:mb-3.5"
+                  }`}
                 >
-                  {item.icon}
+                  <Icon className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={1.6} />
                 </div>
 
-                {/* Label */}
-                <span
-                  className="text-base font-bold text-center leading-tight"
-                  style={{ color: "oklch(18% 0.02 145)" }}
-                >
-                  {item.title}
-                </span>
-
-                {/* Watermark circle */}
-                <div
-                  aria-hidden
-                  className="absolute -bottom-4 -left-4 w-20 h-20 rounded-full opacity-[0.04] transition-opacity duration-200 group-hover:opacity-[0.07]"
-                  style={{ background: "oklch(52% 0.16 145)" }}
-                />
-              </div>
-            </motion.li>
-          ))}
-        </motion.ul>
+                {/* متون */}
+                <div className={isLastOnMobile ? "flex-1 sm:flex-none" : ""}>
+                  <h3 className="text-xs sm:text-base font-bold text-slate-900 mb-1 transition-colors duration-300 group-hover:text-emerald-700 leading-snug">
+                    {item.title}
+                  </h3>
+                  <p className="text-[11px] sm:text-xs text-slate-500 leading-tight sm:leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </motion.div>
       </div>
     </section>
   );

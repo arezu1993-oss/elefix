@@ -1,224 +1,151 @@
-// src/components/Features.tsx
+// components/Features.tsx
 "use client";
 
 import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import {
-  ScanSearch,
+  Activity,
   Cpu,
-  FlaskConical,
-  FileText,
-  CheckCircle2,
+  RefreshCcw,
+  ShieldCheck,
+  ArrowLeft,
 } from "lucide-react";
+import Link from "next/link";
 
 const features = [
   {
-    icon: ScanSearch,
-    title: "تشخیص دقیق در سطح قطعه",
+    icon: Activity,
+    title: "آنالیز دقیق سیگنال",
     description:
-      "آنالیز مدار با ابزار تخصصی تا سطح IC و ترانزیستور — نه حدس، نه تعویض تجربی.",
+      "عیب‌یابی مدارات تا سطح IC و ترانزیستور با تجهیزات دقیق. ما قطعه را تعویض تجربی نمی‌کنیم، علت خرابی را ریشه‌یابی می‌کنیم.",
   },
   {
     icon: Cpu,
-    title: "تعمیر تخصصی درایو صنعتی",
+    title: "مهندسی معکوس ECU",
     description:
-      "ABB، Siemens، Danfoss، Schneider و سایر برندهای بین‌المللی با اطمینان کامل.",
+      "استخراج شماتیک و احیای بردهای نایاب ماشین‌آلات سنگین که امکان تامین سریع قطعه نو برای آن‌ها وجود ندارد.",
   },
   {
-    icon: FlaskConical,
-    title: "تست زیر بار واقعی",
+    icon: RefreshCcw,
+    title: "طراحی سیستم جایگزین",
     description:
-      "پیش از تحویل، درایو تحت شرایط عملیاتی واقعی راستی‌آزمایی می‌شود.",
+      "در صورت سوختگی کامل و غیرقابل تعمیر بودن برد اصلی، سیستم کنترل جایگزین متناسب با ساختار الکترومکانیکی دستگاه طراحی می‌شود.",
   },
   {
-    icon: FileText,
-    title: "گزارش فنی کامل",
+    icon: ShieldCheck,
+    title: "شبیه‌سازی و تست عملکردی",
     description:
-      "مستندات دقیق خرابی، مراحل تعمیر، و توصیه‌های نگهداری برای هر دستگاه.",
+      "راستی‌آزمایی دقیق عملکرد برد تعمیر شده در شرایط شبیه‌سازی‌شده پیش از تحویل و نصب، جهت اطمینان از پایان توقف پروژه.",
   },
-];
-
-const highlights = [
-  "کوتاه‌ترین زمان سرویس در صنعت",
-  "قرارداد دوره‌ای برای شرکت‌های صنعتی",
-  "پشتیبانی B2B در سراسر ایران",
 ];
 
 export default function Features() {
   const sectionRef = useRef<HTMLElement>(null);
+  const inView = useInView(sectionRef, { once: true, margin: "-60px" });
 
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden py-24 sm:py-32"
       dir="rtl"
-      aria-labelledby="features-heading"
-      style={{ background: "oklch(97% 0.006 145)" }}
+      className="relative overflow-hidden bg-slate-50 py-12 sm:py-24 lg:py-32 border-t border-slate-200/60"
     >
-      {/* Subtle grid texture */}
+      {/* پترن پس‌زمینه صنعتی محو */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-0 opacity-[0.03]"
         style={{
           backgroundImage:
-            "linear-gradient(oklch(88% 0.01 145 / 0.5) 1px, transparent 1px), linear-gradient(90deg, oklch(88% 0.01 145 / 0.5) 1px, transparent 1px)",
-          backgroundSize: "48px 48px",
+            "linear-gradient(to right, #0f172a 1px, transparent 1px), linear-gradient(to bottom, #0f172a 1px, transparent 1px)",
+          backgroundSize: "3rem 3rem",
         }}
       />
 
-      {/* Glow accent */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-40 left-1/2 h-[480px] w-[480px] -translate-x-1/2 rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle, oklch(62% 0.18 145 / 0.08) 0%, transparent 70%)",
-        }}
-      />
-
-      <div className="relative mx-auto max-w-6xl px-6 lg:px-8">
-        {/* ── Header ── */}
-        <div className="mb-16 flex flex-col items-start gap-4 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-xl">
-            <span
-              className="mb-3 inline-block rounded-full border px-3 py-1 text-xs font-medium tracking-widest uppercase"
-              style={{
-                borderColor: "oklch(62% 0.18 145 / 0.35)",
-                color: "oklch(42% 0.16 145)",
-                background: "oklch(62% 0.18 145 / 0.08)",
-              }}
-            >
-              چرا الفیکس
-            </span>
-            <h2
-              id="features-heading"
-              className="text-3xl font-bold leading-tight sm:text-4xl"
-              style={{ color: "oklch(18% 0.01 145)" }}
-            >
-              تعمیر درایو صنعتی
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* هدر بخش */}
+        <div className="mb-8 sm:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-8">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="max-w-2xl"
+          >
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-snug sm:leading-[1.2]">
+              تعمیرات صنعتی
               <br />
-              <span style={{ color: "oklch(42% 0.16 145)" }}>
-                به روش مهندسی
+              <span className="text-emerald-600 font-light">
+                به روش مهندسی.
               </span>
             </h2>
+            <p className="mt-3 sm:mt-6 text-sm sm:text-base lg:text-lg text-slate-600 leading-relaxed font-normal max-w-lg">
+              پایان دادن به توقف ماشین‌آلات سنگین، نیازمند حدس و آزمون‌وخطا
+              نیست؛ نیازمند دانش عمیق مکانیک بیوسیستم و الکترونیک است.
+            </p>
+          </motion.div>
+        </div>
+
+        {/* گرید کارت‌های ویژگی */}
+        <div className="grid gap-3 sm:gap-6 md:gap-8 sm:grid-cols-2">
+          {features.map((feature, index) => {
+            const Icon = feature.icon;
+            return (
+              <motion.article
+                key={feature.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{
+                  duration: 0.4,
+                  delay: index * 0.08,
+                  ease: "easeOut",
+                }}
+                className="group relative flex flex-col gap-3.5 sm:gap-6 rounded-2xl sm:rounded-3xl bg-white p-5 sm:p-8 lg:p-10 shadow-sm border border-slate-200/80 transition-all duration-300 hover:shadow-xl hover:shadow-slate-200/50 hover:border-emerald-200"
+              >
+                {/* آیکون */}
+                <div className="flex h-11 w-11 sm:h-14 sm:w-14 items-center justify-center rounded-xl sm:rounded-2xl bg-slate-50 border border-slate-100 text-slate-500 transition-colors duration-300 group-hover:bg-emerald-50 group-hover:text-emerald-600 group-hover:border-emerald-100">
+                  <Icon className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={1.75} />
+                </div>
+
+                {/* محتوا */}
+                <div>
+                  <h3 className="text-base sm:text-xl font-bold text-slate-900 mb-1.5 sm:mb-3">
+                    {feature.title}
+                  </h3>
+                  <p className="text-xs sm:text-base text-slate-600 leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
+              </motion.article>
+            );
+          })}
+        </div>
+
+        {/* نوار Call to Action نهایی (جمع‌وجور و ریسپانسیو در موبایل) */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={inView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 0.5, delay: 0.35, ease: "easeOut" }}
+          className="mt-8 sm:mt-14 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 rounded-2xl sm:rounded-3xl bg-slate-900 p-5 sm:p-8 lg:p-10 shadow-xl shadow-slate-900/10 overflow-hidden relative"
+        >
+          {/* افکت نوری محو */}
+          <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/3 w-48 sm:w-64 h-48 sm:h-64 bg-emerald-500/20 blur-[70px] rounded-full pointer-events-none" />
+
+          <div className="relative z-10 max-w-xl">
+            <h4 className="text-lg sm:text-2xl font-bold text-white mb-1.5 sm:mb-2">
+              دستگاه یا ماشین شما متوقف شده است؟
+            </h4>
+            <p className="text-slate-400 text-xs sm:text-sm lg:text-base leading-relaxed">
+              ارسال مدارک فنی و شرح خرابی برای بررسی اولیه و امکان‌سنجی مهندسی
+              تعمیر.
+            </p>
           </div>
 
-          {/* Highlights pill list */}
-          <ul className="flex flex-col gap-2 lg:items-end">
-            {highlights.map((item) => (
-              <li
-                key={item}
-                className="flex items-center gap-2 text-sm"
-                style={{ color: "oklch(38% 0.01 145)" }}
-              >
-                <CheckCircle2
-                  size={15}
-                  style={{ color: "oklch(42% 0.16 145)", flexShrink: 0 }}
-                  aria-hidden="true"
-                />
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* ── Feature cards grid ── */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {features.map(({ icon: Icon, title, description }) => (
-            <article
-              key={title}
-              className="group relative flex flex-col gap-5 rounded-2xl p-6 transition-all duration-200"
-              style={{
-                background: "oklch(100% 0 0)",
-                border: "1px solid oklch(88% 0.01 145)",
-                boxShadow: "0 1px 4px oklch(18% 0.01 145 / 0.06)",
-              }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.borderColor = "oklch(62% 0.18 145 / 0.45)";
-                el.style.boxShadow = "0 4px 16px oklch(18% 0.01 145 / 0.1)";
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.borderColor = "oklch(88% 0.01 145)";
-                el.style.boxShadow = "0 1px 4px oklch(18% 0.01 145 / 0.06)";
-              }}
-            >
-              {/* Icon wrapper */}
-              <div
-                className="flex h-11 w-11 items-center justify-center rounded-xl"
-                style={{
-                  background: "oklch(62% 0.18 145 / 0.1)",
-                  border: "1px solid oklch(62% 0.18 145 / 0.2)",
-                }}
-              >
-                <Icon
-                  size={22}
-                  style={{ color: "oklch(42% 0.16 145)" }}
-                  aria-hidden="true"
-                  strokeWidth={1.5}
-                />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <h3
-                  className="text-base font-semibold leading-snug"
-                  style={{ color: "oklch(18% 0.01 145)" }}
-                >
-                  {title}
-                </h3>
-                <p
-                  className="text-sm leading-relaxed"
-                  style={{ color: "oklch(46% 0.008 145)" }}
-                >
-                  {description}
-                </p>
-              </div>
-
-              {/* Bottom accent line on hover */}
-              <div
-                aria-hidden="true"
-                className="absolute bottom-0 left-6 right-6 h-px origin-center scale-x-0 rounded-full transition-transform duration-300 group-hover:scale-x-100"
-                style={{ background: "oklch(62% 0.18 145 / 0.5)" }}
-              />
-            </article>
-          ))}
-        </div>
-
-        {/* ── Bottom CTA strip ── */}
-        <div
-          className="mt-12 flex flex-col items-center justify-between gap-6 rounded-2xl px-8 py-6 sm:flex-row"
-          style={{
-            background: "oklch(100% 0 0)",
-            border: "1px solid oklch(88% 0.01 145)",
-            boxShadow: "0 1px 4px oklch(18% 0.01 145 / 0.05)",
-          }}
-        >
-          <p
-            className="text-sm leading-relaxed sm:max-w-sm"
-            style={{ color: "oklch(44% 0.008 145)" }}
+          <Link
+            href="/contact"
+            className="relative z-10 w-full sm:w-auto shrink-0 inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 sm:px-7 sm:py-3.5 text-xs sm:text-sm font-bold text-white transition-all hover:bg-emerald-500 hover:scale-[1.02] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 shadow-md shadow-emerald-900/20"
           >
-            آماده‌اید تجهیزات خود را با کمترین توقف تولید راه‌اندازی کنید؟
-          </p>
-          <a
-            href="#contact"
-            className="shrink-0 rounded-xl px-6 py-3 text-sm font-semibold transition-all duration-150  focus-visible:outline-2 focus-visible:outline-offset-2"
-            style={{
-              background: "oklch(42% 0.16 145)",
-              color: "oklch(98% 0.005 145)",
-              outlineColor: "oklch(42% 0.16 145)",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.background =
-                "oklch(36% 0.16 145)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.background =
-                "oklch(42% 0.16 145)";
-            }}
-          >
-            مشاوره رایگان
-          </a>
-        </div>
+            <span>درخواست مشاوره فنی</span>
+            <ArrowLeft className="w-4 h-4" />
+          </Link>
+        </motion.div>
       </div>
     </section>
   );

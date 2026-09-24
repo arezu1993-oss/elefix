@@ -1,347 +1,169 @@
+// components/StatsSection.tsx
 "use client";
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import CountUp from "react-countup";
-import { Wrench, Zap, ShieldCheck, Users } from "lucide-react";
-
-const brands = [
-  { name: "Caterpillar", abbr: "CAT" },
-  { name: "Valtra", abbr: "VALTRA" },
-  { name: "John Deere", abbr: "JD" },
-  { name: "Atlas", abbr: "ATLAS" },
-  { name: "Terex", abbr: "TEREX" },
-  { name: "Volvo", abbr: "VOLVO" },
-  { name: "Komatsu", abbr: "KOMATSU" },
-];
-
-const stats = [
-  {
-    number: 10,
-    suffix: "+",
-    label: "سال تخصص",
-    sub: "در تعمیر برد الکترونیکی",
-    icon: Wrench,
-  },
-  {
-    number: 50,
-    suffix: "+",
-    label: "برد تعمیر‌شده",
-    sub: "راهسازی و کشاورزی",
-    icon: Zap,
-  },
-  {
-    number: 70,
-    suffix: "%",
-    label: "نرخ موفقیت",
-    sub: "تأیید‌شده در عمل",
-    icon: ShieldCheck,
-  },
-  {
-    number: 100,
-    suffix: "%",
-    label: "تعهد کاری",
-    sub: "همراهی تا رفع مشکل",
-    icon: Users,
-  },
-];
+import { Wrench, Clock, ShieldCheck, Cpu } from "lucide-react";
 
 const toPersian = (n: number) => new Intl.NumberFormat("fa-IR").format(n);
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.55,
-      delay: i * 0.08,
-      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-    },
-  }),
-};
+const metrics = [
+  {
+    value: 9,
+    suffix: " سال",
+    label: "تجربه تخصصی",
+    sub: "الکترونیک و مکانیک بیوسیستم",
+    icon: Wrench,
+  },
+  {
+    value: 24,
+    prefix: "> ",
+    suffix: " ساعت",
+    label: "عیب‌یابی اولیه",
+    sub: "تشخیص ریشه‌ای خطای مدار",
+    icon: Clock,
+  },
+  {
+    value: 100,
+    suffix: "٪",
+    label: "تعهد به بازگشت",
+    sub: "همراهی تا راه‌اندازی دستگاه",
+    icon: ShieldCheck,
+  },
+  {
+    value: 1,
+    suffix: " مرجع",
+    label: "طراحی و مهندسی",
+    sub: "احیای بردهای نایاب صنعتی",
+    icon: Cpu,
+  },
+];
 
 export default function StatsSection() {
   const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const inView = useInView(ref, { once: true, margin: "-50px" });
 
   return (
     <section
       ref={ref}
       dir="rtl"
-      aria-labelledby="stats-heading"
-      className="relative overflow-hidden py-24 sm:py-32"
-      style={{ background: "oklch(13% 0.018 145)" }}
+      className="relative overflow-hidden bg-slate-50 py-12 sm:py-24 lg:py-32 border-t border-slate-200"
     >
-      {/* decorative background */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              "linear-gradient(oklch(100% 0 0 / 0.028) 1px, transparent 1px)," +
-              "linear-gradient(90deg, oklch(100% 0 0 / 0.028) 1px, transparent 1px)",
-            backgroundSize: "40px 40px",
-          }}
-        />
-        <div
-          className="absolute left-1/2 top-0 -translate-x-1/2"
-          style={{
-            width: 640,
-            height: 400,
-            background:
-              "radial-gradient(ellipse at top, oklch(58% 0.2 145 / 0.14) 0%, transparent 70%)",
-          }}
-        />
-        <div
-          className="absolute -bottom-20 -right-20"
-          style={{
-            width: 360,
-            height: 360,
-            borderRadius: "50%",
-            background:
-              "radial-gradient(circle, oklch(58% 0.2 145 / 0.08) 0%, transparent 70%)",
-          }}
-        />
-      </div>
+      {/* پترن شطرنجی پس‌زمینه مهندسی */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:20px_20px] sm:bg-[size:24px_24px]"></div>
 
-      <div className="relative z-10 mx-auto max-w-6xl px-6 lg:px-8">
-        {/* header */}
-        <motion.div
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          custom={0}
-          variants={fadeUp}
-          className="mb-16 flex flex-col items-center gap-4 text-center"
-        >
-          <span
-            className="inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold tracking-widest uppercase"
-            style={{
-              borderColor: "oklch(58% 0.2 145 / 0.3)",
-              color: "oklch(72% 0.16 145)",
-              background: "oklch(58% 0.2 145 / 0.08)",
-            }}
-          >
-            در یک نگاه
+      {/* هاله نوری سبز رنگ بسیار ملایم */}
+      <div className="absolute top-0 right-1/4 -translate-y-1/2 w-64 sm:w-96 h-64 sm:h-96 bg-emerald-400/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* هدر بخش */}
+        <div className="mx-auto max-w-2xl text-center mb-8 sm:mb-16">
+          <span className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full bg-emerald-100/60 border border-emerald-200/60 px-3 py-1 sm:px-4 sm:py-1.5 text-[11px] sm:text-xs font-bold tracking-wider text-emerald-800 mb-3 sm:mb-5 shadow-sm">
+            <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            شاخص‌های عملکرد سازمانی
           </span>
-
-          <h2
-            id="stats-heading"
-            className="text-3xl font-black leading-snug tracking-tight sm:text-5xl"
-            style={{ color: "oklch(96% 0.008 145)" }}
-          >
-            اعداد که خودشان
-            <br />
-            <span style={{ color: "oklch(62% 0.19 145)" }}>حرف می‌زنند</span>
+          <h2 className="text-2xl font-black tracking-tight text-slate-900 sm:text-4xl">
+            دقت در{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-l from-emerald-600 to-teal-500">
+              مهندسی
+            </span>
+            ، سرعت در اجرا
           </h2>
-
-          <p
-            className="max-w-md text-sm leading-relaxed sm:text-base"
-            style={{ color: "oklch(65% 0.01 145)" }}
-          >
-            هر برد الکترونیکی که به الفیکس می‌رسد، با دقت مهندسی و مستندسازی
-            کامل بررسی و تعمیر می‌شود.
-          </p>
-        </motion.div>
-
-        {/* stat cards */}
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-          {stats.map(({ number, suffix, label, sub, icon: Icon }, i) => (
-            <motion.article
-              key={label}
-              initial="hidden"
-              animate={inView ? "visible" : "hidden"}
-              custom={i + 1}
-              variants={fadeUp}
-              className="group relative flex flex-col items-center gap-4 overflow-hidden rounded-2xl p-6 text-center sm:rounded-3xl sm:p-8"
-              style={{
-                background: "oklch(18% 0.018 145)",
-                border: "1px solid oklch(100% 0 0 / 0.07)",
-                transition: "background 150ms ease, border-color 150ms ease",
-              }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.borderColor = "oklch(58% 0.2 145 / 0.35)";
-                el.style.background = "oklch(20% 0.022 145)";
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.borderColor = "oklch(100% 0 0 / 0.07)";
-                el.style.background = "oklch(18% 0.018 145)";
-              }}
-            >
-              {/* top shine */}
-              <div
-                aria-hidden="true"
-                className="absolute inset-x-8 top-0 h-px opacity-50"
-                style={{
-                  background:
-                    "linear-gradient(to right, transparent, oklch(62% 0.19 145), transparent)",
-                }}
-              />
-
-              {/* ghost icon */}
-              <Icon
-                aria-hidden="true"
-                size={80}
-                strokeWidth={1}
-                className="pointer-events-none absolute -bottom-4 -left-4 opacity-[0.04] transition-opacity duration-300 group-hover:opacity-[0.07]"
-                style={{ color: "oklch(62% 0.19 145)" }}
-              />
-
-              {/* icon badge */}
-              <div
-                className="relative flex h-12 w-12 items-center justify-center rounded-xl transition-transform duration-200 group-hover:scale-105"
-                style={{
-                  background: "oklch(58% 0.2 145 / 0.12)",
-                  border: "1px solid oklch(58% 0.2 145 / 0.2)",
-                }}
-              >
-                <Icon
-                  size={22}
-                  strokeWidth={1.6}
-                  style={{ color: "oklch(68% 0.18 145)" }}
-                  aria-hidden="true"
-                />
-              </div>
-
-              {/* number */}
-              <div
-                className="flex items-end justify-center gap-0.5 leading-none"
-                aria-label={`${toPersian(number)}${suffix} ${label}`}
-              >
-                <span
-                  className="text-4xl font-black tabular-nums tracking-tight sm:text-5xl"
-                  style={{ color: "oklch(96% 0.01 145)" }}
-                >
-                  {inView ? (
-                    <CountUp
-                      end={number}
-                      duration={2.2}
-                      formattingFn={toPersian}
-                    />
-                  ) : (
-                    toPersian(0)
-                  )}
-                </span>
-                <span
-                  className="mb-1 text-2xl font-black sm:mb-1.5 sm:text-3xl"
-                  style={{ color: "oklch(62% 0.19 145)" }}
-                >
-                  {suffix}
-                </span>
-              </div>
-
-              {/* label */}
-              <div className="flex flex-col gap-1">
-                <span
-                  className="text-sm font-bold sm:text-base"
-                  style={{ color: "oklch(90% 0.01 145)" }}
-                >
-                  {label}
-                </span>
-                <span
-                  className="text-xs leading-relaxed"
-                  style={{ color: "oklch(55% 0.01 145)" }}
-                >
-                  {sub}
-                </span>
-              </div>
-            </motion.article>
-          ))}
         </div>
 
-        {/* brand strip */}
-        <motion.div
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          custom={stats.length + 1}
-          variants={fadeUp}
-          className="mt-10"
-        >
-          <p
-            className="mb-5 text-center text-xs font-semibold uppercase tracking-widest"
-            style={{ color: "oklch(45% 0.01 145)" }}
-          >
-            برندهایی که با آن‌ها کار کرده‌ایم
-          </p>
-
-          <div
-            className="flex flex-wrap items-center justify-center gap-3 rounded-2xl px-6 py-5"
-            style={{
-              background: "oklch(16% 0.016 145)",
-              border: "1px solid oklch(100% 0 0 / 0.06)",
-            }}
-          >
-            {brands.map(({ name, abbr }) => (
-              <span
-                key={name}
-                title={name}
-                className="rounded-lg px-4 py-2 text-xs font-bold tracking-widest"
-                style={{
-                  color: "oklch(52% 0.012 145)",
-                  border: "1px solid oklch(100% 0 0 / 0.06)",
-                  background: "oklch(18% 0.016 145)",
-                  transition: "color 150ms ease, border-color 150ms ease",
+        {/* گرید ۲ ستونه در موبایل و ۴ ستونه در دسکتاپ */}
+        <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
+          {metrics.map((item, index) => {
+            const Icon = item.icon;
+            return (
+              <motion.div
+                key={item.label}
+                initial={{ opacity: 0, y: 15 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{
+                  duration: 0.4,
+                  delay: index * 0.08,
+                  ease: "easeOut",
                 }}
-                onMouseEnter={(e) => {
-                  const el = e.currentTarget as HTMLSpanElement;
-                  el.style.color = "oklch(70% 0.15 145)";
-                  el.style.borderColor = "oklch(58% 0.2 145 / 0.3)";
-                }}
-                onMouseLeave={(e) => {
-                  const el = e.currentTarget as HTMLSpanElement;
-                  el.style.color = "oklch(52% 0.012 145)";
-                  el.style.borderColor = "oklch(100% 0 0 / 0.06)";
-                }}
+                className="group relative flex flex-col justify-between rounded-2xl sm:rounded-[2rem] bg-white p-4 sm:p-7 shadow-sm border border-slate-200/70 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-emerald-900/5 hover:border-emerald-200 z-10"
               >
-                {abbr}
+                {/* آیکون */}
+                <div className="flex items-center justify-between mb-4 sm:mb-8">
+                  <div className="flex h-10 w-10 sm:h-13 sm:w-13 items-center justify-center rounded-xl sm:rounded-2xl bg-emerald-50 border border-emerald-100/60 text-emerald-600 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300 shadow-xs">
+                    <Icon
+                      className="h-5 w-5 sm:h-6 sm:w-6"
+                      strokeWidth={1.75}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex items-baseline gap-0.5 sm:gap-1 text-slate-900 font-black tracking-tight">
+                    {item.prefix && (
+                      <span className="text-lg sm:text-2xl font-bold text-slate-400">
+                        {item.prefix}
+                      </span>
+                    )}
+                    <span className="text-3xl sm:text-4xl lg:text-5xl tabular-nums">
+                      {inView ? (
+                        <CountUp
+                          end={item.value}
+                          duration={2}
+                          formattingFn={toPersian}
+                        />
+                      ) : (
+                        toPersian(0)
+                      )}
+                    </span>
+                    <span className="text-xs sm:text-base font-bold text-emerald-600 mr-0.5 sm:mr-1">
+                      {item.suffix}
+                    </span>
+                  </div>
+
+                  <h3 className="mt-2.5 sm:mt-4 text-xs sm:text-base font-bold text-slate-900">
+                    {item.label}
+                  </h3>
+                  <p className="mt-1 sm:mt-2 text-[10px] sm:text-xs text-slate-500 font-medium leading-relaxed line-clamp-2">
+                    {item.sub}
+                  </p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* نوار پایینی تیره (کامپکت و شیک در موبایل) */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.35 }}
+          className="mt-6 sm:mt-12 rounded-2xl sm:rounded-3xl bg-slate-900 p-4 sm:p-7 shadow-xl shadow-slate-900/10 flex flex-col lg:flex-row items-center justify-between gap-4 sm:gap-6 relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 w-48 sm:w-64 h-48 sm:h-64 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+          <div className="relative flex items-center gap-2.5 w-full lg:w-auto justify-start">
+            <div className="w-1 sm:w-1.5 h-5 sm:h-7 bg-emerald-500 rounded-full"></div>
+            <span className="text-xs sm:text-sm font-bold text-white tracking-wide">
+              پوشش تخصصی سیستم‌های سنگین:
+            </span>
+          </div>
+
+          <div className="relative flex flex-wrap gap-1.5 sm:gap-3 text-[11px] sm:text-xs font-semibold text-slate-300 w-full lg:w-auto">
+            {[
+              "کنترلرهای موتور دیزل",
+              "بردهای هیدرولیک و پمپ",
+              "سیستم‌های مانیتورینگ",
+              "یونیت‌های تزریق",
+            ].map((tech) => (
+              <span
+                key={tech}
+                className="rounded-lg sm:rounded-xl bg-slate-800/90 px-2.5 py-1.5 sm:px-4 sm:py-2 border border-slate-700/60 hover:bg-slate-700 hover:text-white transition-colors cursor-default"
+              >
+                {tech}
               </span>
             ))}
           </div>
-        </motion.div>
-
-        {/* trust bar */}
-        <motion.div
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          custom={stats.length + 2}
-          variants={fadeUp}
-          className="mt-4 flex flex-col items-center justify-between gap-5 rounded-2xl px-8 py-5 sm:flex-row"
-          style={{
-            background: "oklch(18% 0.018 145)",
-            border: "1px solid oklch(58% 0.2 145 / 0.15)",
-          }}
-        >
-          <p
-            className="text-sm leading-relaxed sm:max-w-sm sm:text-base"
-            style={{ color: "oklch(60% 0.01 145)" }}
-          >
-            حوزه‌های تخصصی:{" "}
-            <span style={{ color: "oklch(72% 0.14 145)" }}>
-              بردهای راهسازی · ماشین‌آلات کشاورزی · تجهیزات برقی
-            </span>
-          </p>
-
-          <a
-            href="#contact"
-            className="shrink-0 rounded-xl px-6 py-3 text-sm font-bold focus-visible:outline-2 focus-visible:outline-offset-2"
-            style={{
-              background: "oklch(48% 0.18 145)",
-              color: "oklch(97% 0.005 145)",
-              transition: "background 150ms ease",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.background =
-                "oklch(42% 0.18 145)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.background =
-                "oklch(48% 0.18 145)";
-            }}
-          >
-            ارسال برد برای بررسی
-          </a>
         </motion.div>
       </div>
     </section>

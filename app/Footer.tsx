@@ -4,20 +4,43 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { CheckCircle2, ChevronLeft, Mail, MapPin, Send } from "lucide-react";
+import {
+  CheckCircle2,
+  ChevronLeft,
+  Mail,
+  MapPin,
+  PhoneCall,
+  Send,
+  ExternalLink,
+  ShieldCheck,
+} from "lucide-react";
 
-const QUICK_LINKS = [
-  { title: "خانه", href: "/" },
-  { title: "خدمات ما", href: "/services" },
-  { title: "صنایع مشتریان", href: "/#clients" },
-  { title: "سوالات متداول", href: "/#faq" },
-  { title: "تماس با ما", href: "/contact" },
-  { title: "درباره ما", href: "/about" },
+// تبدیل ارقام به فارسی
+const toPersianDigits = (text: string | number): string => {
+  const farsiDigits = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
+  return text.toString().replace(/\d/g, (x) => farsiDigits[parseInt(x, 10)]);
+};
+
+// لینک‌های واقعی استخراج‌شده از سورس پروژه
+const SERVICE_LINKS = [
+  { title: "تعمیر بردهای الکترونیکی و ECU", href: "/services/board-repair" },
+  { title: "برق و اتوماسیون ماشین‌آلات", href: "/services/machinery-systems" },
+  { title: "عیب‌یابی موتورهای کامینز", href: "/services/cummins-engine" },
+  { title: "تست و کالیبراسیون کامان‌ریل", href: "/services/common-rail" },
+  { title: "الکترونیک جرثقیل‌های صنعتی", href: "/services/crane-industrial" },
+];
+
+const COMPANY_LINKS = [
+  { title: "پروژه‌ها و نمونه‌کارها", href: "/portfolio" },
+  { title: "رزومه و سوابق تخصصی", href: "/about/resume" },
+  { title: "اختراعات و نوآوری‌ها", href: "/about/invention" },
+  { title: "گواهینامه‌های استاندارد", href: "/about/certificates" },
+  { title: "تماس و نشانی کارگاه", href: "/contact" },
 ];
 
 const TELEGRAM_URL = "https://t.me/+989375525707";
 
-function TelegramIcon({ className = "w-5 h-5" }: { className?: string }) {
+function TelegramIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -30,7 +53,7 @@ function TelegramIcon({ className = "w-5 h-5" }: { className?: string }) {
   );
 }
 
-function LinkedInIcon({ className = "w-5 h-5" }: { className?: string }) {
+function LinkedInIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -55,198 +78,231 @@ export default function Footer() {
 
     if (trimmed.length < 8) {
       setStatus("error");
-      setMessage("لطفاً شماره تماس معتبر وارد کنید.");
+      setMessage("لطفاً شماره همراه معتبر وارد کنید.");
       return;
     }
 
     const text = [
-      "سلام آقای شادمانی،",
+      "سلام و وقت بخیر،",
       "",
-      "درخواست مشاوره از سایت الفیکس",
-      `شماره تماس: ${trimmed}`,
-      "موضوع: استعلام و مشاوره تعمیر تجهیزات الکترونیک صنعتی",
+      "درخواست ارتباط فوری از وب‌سایت الفیکس:",
+      `شماره تماس کارفرما: ${trimmed}`,
+      "موضوع: استعلام عیب‌یابی / درخواست تعمیرات تخصصی",
     ].join("\n");
 
     window.open(`${TELEGRAM_URL}?text=${encodeURIComponent(text)}`, "_blank");
 
     setStatus("success");
-    setMessage("تلگرام باز شد. پیام آماده ارسال است.");
+    setMessage("ارتباط با تلگرام باز شد. پیام آماده ارسال است.");
     setPhone("");
   }
 
   return (
-    <footer dir="rtl" className="relative overflow-hidden bg-[#08120c]">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute -right-24 -top-24 h-64 w-64 rounded-full bg-emerald-500/10 blur-3xl" />
-        <div className="absolute -bottom-32 -left-24 h-72 w-72 rounded-full bg-teal-500/10 blur-3xl" />
-      </div>
-
+    <footer
+      dir="rtl"
+      className="relative overflow-hidden bg-slate-950 text-slate-200 border-t border-slate-800/80"
+    >
+      {/* هدر بالا خط مهندسی سبز رنگ پیوسته با پس‌زمینه */}
       <div
         aria-hidden="true"
-        className="relative h-px w-full bg-gradient-to-r from-transparent via-emerald-500/60 to-transparent"
+        className="h-1 w-full bg-gradient-to-r from-emerald-500/10 via-emerald-500 to-emerald-500/10"
       />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 pb-8 pt-14 sm:px-6 lg:px-10">
-        <div className="grid grid-cols-1 gap-10 border-b border-white/10 pb-12 lg:grid-cols-12">
-          {/* ستون برند */}
-          <div className="lg:col-span-5">
-            <div className="flex items-center gap-4">
-              <div className="relative h-14 w-14 shrink-0">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 pt-12 pb-8 sm:px-6 lg:px-8">
+        {/* گرید اصلی ۴ ستونه شبیه ساختار سایت‌های مهندسی بین‌المللی */}
+        <div className="grid grid-cols-1 gap-10 pb-12 border-b border-slate-800/80 md:grid-cols-2 lg:grid-cols-12 lg:gap-8">
+          {/* ستون ۱: هویت، برند و ارتباط مستقیم (عرض ۴ ستون در دسکتاپ) */}
+          <div className="lg:col-span-4 space-y-5">
+            <div className="flex items-center gap-3">
+              <div className="relative h-12 w-12 shrink-0 rounded-xl bg-slate-900 border border-slate-800 p-2 shadow-inner">
                 <Image
                   src="/images/logo-elefix.svg"
-                  alt="لوگو الفیکس"
-                  width={56}
-                  height={56}
+                  alt="لوگوی الکترونیک صنعتی الفیکس"
+                  width={40}
+                  height={40}
                   className="h-full w-full object-contain"
                 />
               </div>
               <div>
-                <h2 className="text-xl font-black text-white">الفیکس</h2>
-                <p className="mt-0.5 text-[10px] font-bold tracking-[0.2em] text-emerald-400">
-                  ELEFIX SPECIALIZED SERVICES
-                </p>
+                <span className="text-xl font-black tracking-tight text-white block">
+                  الفیکس
+                </span>
+                <span className="text-[10px] font-bold tracking-widest text-emerald-400 uppercase">
+                  ELEFIX INDUSTRIAL ELECTRONICS
+                </span>
               </div>
             </div>
 
-            <div className="mt-6 flex items-start gap-3 text-sm text-slate-400">
-              <MapPin size={16} className="mt-0.5 shrink-0 text-emerald-400" />
-              <span>تهران، پرند</span>
+            <p className="text-xs sm:text-sm leading-relaxed text-slate-400 font-light">
+              مرکز تخصصی عیب‌یابی و تعمیر بردهای الکترونیکی (ECU)، سیستم‌های
+              دیزل کامینز، سوخت‌رسانی کامان‌ریل و برق صنعتی ماشین‌آلات سنگین
+              راه‌سازی و صنایع نفت و گاز.
+            </p>
+
+            <div className="space-y-2.5 pt-2 text-xs text-slate-300">
+              <div className="flex items-center gap-2.5">
+                <MapPin className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>تهران، پرند — خدمات و پذیرش قطعات از سراسر کشور</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <PhoneCall className="w-4 h-4 text-emerald-400 shrink-0" />
+                <a
+                  href="tel:09375525707"
+                  dir="ltr"
+                  className="font-mono text-slate-300 hover:text-emerald-400 transition-colors"
+                >
+                  {toPersianDigits("0937 552 5707")}
+                </a>
+              </div>
             </div>
 
-            <div className="mt-7 flex items-center gap-3">
+            {/* آیکون شبکه‌های اجتماعی و حرفه‌ای */}
+            <div className="flex items-center gap-2.5 pt-1">
               <a
                 href={TELEGRAM_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="تلگرام"
-                className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-slate-400 transition hover:-translate-y-0.5 hover:border-emerald-500/50 hover:bg-emerald-500/10 hover:text-emerald-400"
+                aria-label="کانال و پشتیبانی تلگرام"
+                className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-800 bg-slate-900 text-slate-400 transition hover:border-emerald-500/60 hover:bg-emerald-500/10 hover:text-emerald-400"
               >
                 <TelegramIcon />
               </a>
-
               <a
                 href="https://linkedin.com/in/mohammad-shademani"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="لینکدین"
-                className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-slate-400 transition hover:-translate-y-0.5 hover:border-emerald-500/50 hover:bg-emerald-500/10 hover:text-emerald-400"
+                aria-label="پروفایل لینکدین مدیریت فنی"
+                className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-800 bg-slate-900 text-slate-400 transition hover:border-emerald-500/60 hover:bg-emerald-500/10 hover:text-emerald-400"
               >
                 <LinkedInIcon />
               </a>
-
               <a
                 href="mailto:shademanimohammad@gmail.com"
-                aria-label="ایمیل"
-                className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-slate-400 transition hover:-translate-y-0.5 hover:border-emerald-500/50 hover:bg-emerald-500/10 hover:text-emerald-400"
+                aria-label="مکاتبه ایمیلی"
+                className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-800 bg-slate-900 text-slate-400 transition hover:border-emerald-500/60 hover:bg-emerald-500/10 hover:text-emerald-400"
               >
-                <Mail className="h-5 w-5" />
+                <Mail className="w-4 h-4" />
               </a>
             </div>
           </div>
 
-          {/* دسترسی سریع */}
+          {/* ستون ۲: خدمات تخصصی (عرض ۳ ستون در دسکتاپ) */}
           <div className="lg:col-span-3">
-            <h3 className="text-sm font-black tracking-wider text-emerald-400">
-              دسترسی سریع
+            <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-4 pb-2 border-b border-slate-800/80">
+              خدمات تخصصی مهندسی
             </h3>
-
-            <ul className="mt-5 space-y-2.5">
-              {QUICK_LINKS.map((link) => (
+            <ul className="space-y-2.5">
+              {SERVICE_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="group inline-flex items-center gap-2 text-sm text-slate-400 transition-colors hover:text-emerald-400"
+                    className="group inline-flex items-center gap-1.5 text-xs sm:text-sm text-slate-400 hover:text-emerald-300 transition-colors"
                   >
-                    <ChevronLeft
-                      size={13}
-                      className="text-emerald-600 transition-transform group-hover:-translate-x-0.5"
-                    />
-                    {link.title}
+                    <ChevronLeft className="w-3.5 h-3.5 text-slate-600 transition-transform group-hover:-translate-x-1 group-hover:text-emerald-400" />
+                    <span>{link.title}</span>
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* مشاوره سریع */}
-          <div className="lg:col-span-4">
-            <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5">
-              <div className="flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-400">
-                  <Send size={16} />
+          {/* ستون ۳: درباره و گواهی‌ها (عرض ۲ ستون در دسکتاپ) */}
+          <div className="lg:col-span-2">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-4 pb-2 border-b border-slate-800/80">
+              رزومه و صلاحیت‌ها
+            </h3>
+            <ul className="space-y-2.5">
+              {COMPANY_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="group inline-flex items-center gap-1.5 text-xs sm:text-sm text-slate-400 hover:text-emerald-300 transition-colors"
+                  >
+                    <ChevronLeft className="w-3.5 h-3.5 text-slate-600 transition-transform group-hover:-translate-x-1 group-hover:text-emerald-400" />
+                    <span>{link.title}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* ستون ۴: اکشن‌باکس استعلام تلگرامی (عرض ۳ ستون در دسکتاپ) */}
+          <div className="lg:col-span-3">
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-5 shadow-lg relative">
+              <div className="flex items-center gap-2.5 text-emerald-400 mb-2">
+                <Send className="w-4 h-4 -rotate-45" />
+                <span className="text-xs font-bold uppercase tracking-wide">
+                  استعلام و مشاوره فنی
                 </span>
-                <div>
-                  <h3 className="text-sm font-black text-white">مشاوره سریع</h3>
-                  <p className="text-[11px] leading-5 text-slate-500">
-                    ارتباط از طریق تلگرام
-                  </p>
-                </div>
               </div>
 
-              <div className="my-4 h-px bg-white/10" />
-
-              <p className="text-xs leading-6 text-slate-400">
-                شماره تماس خود را وارد کنید تا پیام آماده در تلگرام باز شود.
+              <p className="text-xs text-slate-400 leading-relaxed mb-4">
+                شماره خود را ثبت کنید تا مستقیماً به گفت‌وگوی تلگرام واحد فنی
+                متصل شوید:
               </p>
 
-              <form onSubmit={handleSubmit} className="mt-4 space-y-3">
-                <div className="flex gap-2">
-                  <label htmlFor="footer-phone" className="sr-only">
-                    شماره تماس
-                  </label>
+              <form onSubmit={handleSubmit} className="space-y-2.5">
+                <div className="relative">
                   <input
-                    id="footer-phone"
                     type="tel"
                     inputMode="tel"
                     dir="ltr"
                     value={phone}
-                    onChange={(event) => setPhone(event.target.value)}
-                    placeholder="0912 000 0000"
-                    className="h-11 w-full rounded-xl border border-white/10 bg-black/40 px-4 text-left text-sm text-white outline-none transition focus:border-emerald-500/60"
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="۰۹۱۲ ۰۰۰ ۰۰۰۰"
+                    className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-left text-xs text-white placeholder-slate-600 outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                   />
-                  <button
-                    type="submit"
-                    aria-label="ارسال"
-                    className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/25 transition hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0"
-                  >
-                    <Send size={16} />
-                  </button>
                 </div>
 
-                {message ? (
+                <button
+                  type="submit"
+                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 py-2.5 px-4 text-xs font-bold text-white shadow-md shadow-emerald-950/40 transition-colors active:scale-[0.98]"
+                >
+                  <Send className="w-3.5 h-3.5 -rotate-45" />
+                  ارسال پیام در تلگرام
+                </button>
+
+                {message && (
                   <div
-                    className={
+                    className={`mt-2 flex items-start gap-1.5 rounded-lg border p-2 text-[11px] leading-5 ${
                       status === "success"
-                        ? "flex items-start gap-2 rounded-xl border border-emerald-500/25 bg-emerald-500/10 px-3 py-2.5 text-xs leading-6 text-emerald-400"
-                        : "flex items-start gap-2 rounded-xl border border-red-500/25 bg-red-500/10 px-3 py-2.5 text-xs leading-6 text-red-400"
-                    }
+                        ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
+                        : "border-red-500/30 bg-red-500/10 text-red-300"
+                    }`}
                   >
-                    {status === "success" ? (
-                      <CheckCircle2 size={14} className="mt-0.5 shrink-0" />
-                    ) : null}
+                    {status === "success" && (
+                      <CheckCircle2 className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                    )}
                     <span>{message}</span>
                   </div>
-                ) : null}
+                )}
               </form>
             </div>
           </div>
         </div>
 
-        {/* نوار پایین */}
-        <div className="flex flex-col items-center justify-between gap-3 pt-6 text-center text-xs text-slate-500 md:flex-row">
+        {/* نوار کپی‌رایت زیرین (کاملاً مهندسی و مینیمال) */}
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] sm:text-xs text-slate-500">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-emerald-500/70" />
+            <p>
+              © {toPersianDigits(currentYear)}{" "}
+              <span className="text-slate-300 font-medium">
+                الفیکس (ELEFIX)
+              </span>{" "}
+              — کلیه حقوق و مستندات فنی محفوظ است.
+            </p>
+          </div>
           <p>
-            © {currentYear} <span className="text-slate-400">الفیکس</span> —
-            تمامی حقوق محفوظ است.
-          </p>
-          <p>
-            طراحی و توسعه:{" "}
+            توسعه و طراحی فنی:{" "}
             <a
               href="https://www.linkedin.com/in/arezoo-nemati"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-slate-400 transition hover:text-emerald-400"
+              className="text-slate-400 hover:text-emerald-400 transition-colors font-medium inline-flex items-center gap-1"
             >
               آرزو نعمتی
+              <ExternalLink className="w-3 h-3" />
             </a>
           </p>
         </div>
